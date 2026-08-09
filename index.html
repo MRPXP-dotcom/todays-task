@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Task - إدارة المهام اليومية</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+        body { background: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 450px; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { font-size: 1.5rem; color: #2c3e50; text-align: center; margin-bottom: 10px; }
+        .subtitle { font-size: 0.85rem; color: #7f8c8d; text-align: center; margin-bottom: 20px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
+        input[type="text"] { flex:1; padding: 12px; border:1px solid #ddd; border-radius:8px; font-size:0.95rem; outline:none; }
+        input[type="text"]:focus { border-color:#3498db; }
+        button { background:#3498db; color:white; border:none; padding:0 20px; border-radius:8px; font-size:0.9rem; cursor:pointer; transition:0.2s; white-space:nowrap; }
+        button:hover { background:#2980b9; }
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .counter { font-size:0.85rem; color:#555; background:#ecf0f1; padding:4px 12px; border-radius:20px; }
+        .clear-btn { background:#e74c3c; color:white; border:none; padding:6px 15px; border-radius:6px; font-size:0.8rem; cursor:pointer; }
+        .clear-btn:hover { background:#c0392b; }
+        ul { list-style:none; }
+        li { display:flex; align-items:center; gap:10px; background:#f9f9f9; padding:10px 15px; border-radius:8px; margin-bottom:8px; border:1px solid #eee; transition:0.2s; animation: fadeIn 0.3s ease; }
+        li.completed { background:#e8f8f5; border-color:#a3e4d7; }
+        li.completed .task-text { text-decoration:line-through; color:#7f8c8d; }
+        .task-text { flex:1; cursor:pointer; word-break:break-word; }
+        .edit-btn, .delete-btn { background:transparent; border:none; cursor:pointer; font-size:0.9rem; padding:5px; }
+        .edit-btn { color:#f39c12; }
+        .edit-btn:hover { color:#d68910; }
+        .delete-btn { color:#e74c3c; }
+        .delete-btn:hover { color:#c0392b; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>مرحباً بك في مهمة اليوم</h1>
+        <p class="subtitle">تطبيق بسيط ومنظم لإدارة مهامك اليومية بدون تواريخ. أضف مهمتك، ضع علامة صح عند الإنجاز، أو احذفها عند التعثر.</p>
+        
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="أضف مهمة جديدة...">
+            <button id="addBtn">إضافة</button>
+        </div>
+
+        <div class="controls">
+            <span class="counter" id="counter">المتبقي: 0</span>
+            <button class="clear-btn" id="clearCompleted">مسح المكتمل</button>
+        </div>
+
+        <ul id="taskList"></ul>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('taskInput');
+        const addBtn = document.getElementById('addBtn');
+        const taskList = document.getElementById('taskList');
+        const clearCompletedBtn = document.getElementById('clearCompleted');
+        const counter = document.getElementById('counter');
+
+        // تحميل المهام من localStorage
+        let tasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
+
+        // دالة لحفظ المهام وتحديث الواجهة
+        function saveAndRender() {
+            localStorage.setItem('dailyTasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            let remaining = 0;
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                if (task.completed) li.classList.add('completed');
+                else remaining++;
+
+                const span = document.createElement('span');
+                span.className = 'task-text';
+                span.textContent = task.text;
+                span.addEventListener('click', () => {
+                    tasks[index].completed = !tasks[index].completed;
+                    saveAndRender();
+                });
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-btn';
+                editBtn.innerHTML = '✏️';
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const newText = prompt('عدل المهمة:', task.text);
+                    if (newText && newText.trim() !== '') {
+                        tasks[index].text = newText.trim();
+                        saveAndRender();
+                    }
+                });
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.innerHTML = '🗑️';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    tasks.splice(index, 1);
+                    saveAndRender();
+                });
+
+                li.appendChild(span);
+                li.appendChild(editBtn);
+                li.appendChild(deleteBtn);
+                taskList.appendChild(li);
+            });
+            counter.textContent = `المتبقي: ${remaining}`;
+        }
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text === '') return;
+            tasks.push({ text, completed: false });
+            taskInput.value = '';
+            saveAndRender();
+        }
+
+        addBtn.addEventListener('click', addTask);
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addTask();
+        });
+
+        clearCompletedBtn.addEventListener('click', () => {
+            tasks = tasks.filter(task => !task.completed);
+            saveAndRender();
+        });
+
+        // العرض الأولي
+        renderTasks();
+    </script>
+</body>
+</html>
