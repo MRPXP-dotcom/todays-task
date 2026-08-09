@@ -1,136 +1,260 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="htmlRoot">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Today's Task - إدارة المهام اليومية</title>
+    <title>مهمة اليوم</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-        body { background: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        .container { background: white; width: 100%; max-width: 450px; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        h1 { font-size: 1.5rem; color: #2c3e50; text-align: center; margin-bottom: 10px; }
-        .subtitle { font-size: 0.85rem; color: #7f8c8d; text-align: center; margin-bottom: 20px; }
-        .input-group { display: flex; gap: 10px; margin-bottom: 15px; }
-        input[type="text"] { flex:1; padding: 12px; border:1px solid #ddd; border-radius:8px; font-size:0.95rem; outline:none; }
-        input[type="text"]:focus { border-color:#3498db; }
-        button { background:#3498db; color:white; border:none; padding:0 20px; border-radius:8px; font-size:0.9rem; cursor:pointer; transition:0.2s; white-space:nowrap; }
-        button:hover { background:#2980b9; }
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .counter { font-size:0.85rem; color:#555; background:#ecf0f1; padding:4px 12px; border-radius:20px; }
-        .clear-btn { background:#e74c3c; color:white; border:none; padding:6px 15px; border-radius:6px; font-size:0.8rem; cursor:pointer; }
-        .clear-btn:hover { background:#c0392b; }
-        ul { list-style:none; }
-        li { display:flex; align-items:center; gap:10px; background:#f9f9f9; padding:10px 15px; border-radius:8px; margin-bottom:8px; border:1px solid #eee; transition:0.2s; animation: fadeIn 0.3s ease; }
-        li.completed { background:#e8f8f5; border-color:#a3e4d7; }
-        li.completed .task-text { text-decoration:line-through; color:#7f8c8d; }
-        .task-text { flex:1; cursor:pointer; word-break:break-word; }
-        .edit-btn, .delete-btn { background:transparent; border:none; cursor:pointer; font-size:0.9rem; padding:5px; }
-        .edit-btn { color:#f39c12; }
-        .edit-btn:hover { color:#d68910; }
-        .delete-btn { color:#e74c3c; }
-        .delete-btn:hover { color:#c0392b; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        body {
+            background-color: #f4f4f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e1b4b;
+        }
+        .lang-btn {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .add-btn-main {
+            background-color: #312e81;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(49, 46, 129, 0.2);
+        }
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+        .task-green {
+            background-color: #e8f5e9;
+            border-color: #c8e6c9;
+        }
+        .task-red {
+            background-color: #ffebee;
+            border-color: #ffcdd2;
+        }
+        .task-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1f2937;
+            flex-grow: 1;
+            text-align: right;
+            padding: 0 10px;
+        }
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #00796b;
+        }
+        .task-num {
+            background: #ffffff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4b5563;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .task-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-check {
+            background-color: #2e7d32;
+            color: white;
+        }
+        .btn-uncheck {
+            background-color: #c62828;
+            color: white;
+        }
+        .btn-delete {
+            background-color: transparent;
+            color: #d32f2f;
+            font-size: 16px;
+        }
+        .empty-state {
+            text-align: center;
+            color: #9ca3af;
+            padding: 30px;
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>مرحباً بك في مهمة اليوم</h1>
-        <p class="subtitle">تطبيق بسيط ومنظم لإدارة مهامك اليومية بدون تواريخ. أضف مهمتك، ضع علامة صح عند الإنجاز، أو احذفها عند التعثر.</p>
-        
-        <div class="input-group">
-            <input type="text" id="taskInput" placeholder="أضف مهمة جديدة...">
-            <button id="addBtn">إضافة</button>
+
+    <div class="container" id="appContainer">
+        <div class="header">
+            <button class="lang-btn" onclick="toggleLanguage()">
+                <span id="langText">English</span> 🌐
+            </button>
+            <h1 class="title" id="mainTitle">مهمة اليوم</h1>
         </div>
 
-        <div class="controls">
-            <span class="counter" id="counter">المتبقي: 0</span>
-            <button class="clear-btn" id="clearCompleted">مسح المكتمل</button>
-        </div>
+        <button class="add-btn-main" onclick="addNewTask()">
+            <span id="addBtnText">+ أضف مهمة</span>
+        </button>
 
-        <ul id="taskList"></ul>
+        <div class="task-list" id="taskList">
+            <!-- المهام ستظهر هنا ديناميكياً -->
+        </div>
     </div>
 
     <script>
-        const taskInput = document.getElementById('taskInput');
-        const addBtn = document.getElementById('addBtn');
-        const taskList = document.getElementById('taskList');
-        const clearCompletedBtn = document.getElementById('clearCompleted');
-        const counter = document.getElementById('counter');
-
-        // تحميل المهام من localStorage
-        let tasks = JSON.parse(localStorage.getItem('dailyTasks')) || [];
-
-        // دالة لحفظ المهام وتحديث الواجهة
-        function saveAndRender() {
-            localStorage.setItem('dailyTasks', JSON.stringify(tasks));
-            renderTasks();
-        }
+        let currentLang = 'ar';
+        let tasks = [
+            { text: 'تمرين يوم الاحد', completed: true, type: 'green' },
+            { text: 'تمرين يوم الاثنين', completed: false, type: 'red' },
+            { text: 'تمرين يوم الثلاثاء', completed: true, type: 'green' },
+            { text: 'عطيه قطع حبل افكاري اليوم', completed: false, type: 'red' }
+        ];
 
         function renderTasks() {
-            taskList.innerHTML = '';
-            let remaining = 0;
+            const list = document.getElementById('taskList');
+            list.innerHTML = '';
+
+            if (tasks.length === 0) {
+                list.innerHTML = `<div class="empty-state" id="emptyText">${currentLang === 'ar' ? 'أضف أول مهمة لك' : 'Add your first task'}</div>`;
+                return;
+            }
+
             tasks.forEach((task, index) => {
-                const li = document.createElement('li');
-                if (task.completed) li.classList.add('completed');
-                else remaining++;
+                const item = document.createElement('div');
+                item.className = `task-item ${task.type === 'green' ? 'task-green' : 'task-red'}`;
 
-                const span = document.createElement('span');
-                span.className = 'task-text';
-                span.textContent = task.text;
-                span.addEventListener('click', () => {
-                    tasks[index].completed = !tasks[index].completed;
-                    saveAndRender();
-                });
-
-                const editBtn = document.createElement('button');
-                editBtn.className = 'edit-btn';
-                editBtn.innerHTML = '✏️';
-                editBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const newText = prompt('عدل المهمة:', task.text);
-                    if (newText && newText.trim() !== '') {
-                        tasks[index].text = newText.trim();
-                        saveAndRender();
-                    }
-                });
-
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'delete-btn';
-                deleteBtn.innerHTML = '🗑️';
-                deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    tasks.splice(index, 1);
-                    saveAndRender();
-                });
-
-                li.appendChild(span);
-                li.appendChild(editBtn);
-                li.appendChild(deleteBtn);
-                taskList.appendChild(li);
+                item.innerHTML = `
+                    <div class="task-actions">
+                        <button class="action-btn btn-delete" onclick="deleteTask(${index})" title="حذف">🗑️</button>
+                        <button class="action-btn ${task.type === 'green' ? 'btn-uncheck' : 'btn-check'}" onclick="toggleTaskType(${index})">${task.type === 'green' ? '✕' : '✓'}</button>
+                        <button class="action-btn" style="background:transparent; color:${task.completed ? '#2e7d32':'#9ca3af'};" onclick="toggleComplete(${index})">✓</button>
+                    </div>
+                    <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
+                    <div class="task-num">${index + 1}</div>
+                `;
+                list.appendChild(item);
             });
-            counter.textContent = `المتبقي: ${remaining}`;
         }
 
-        function addTask() {
-            const text = taskInput.value.trim();
-            if (text === '') return;
-            tasks.push({ text, completed: false });
-            taskInput.value = '';
-            saveAndRender();
+        function addNewTask() {
+            const promptText = currentLang === 'ar' ? 'أدخل نص المهمة الجديدة:' : 'Enter new task text:';
+            const text = prompt(promptText);
+            if (text && text.trim() !== '') {
+                const typePrompt = currentLang === 'ar' ? 'اختر النوع: اكتب (1) للأخضر أو (2) للأحمر' : 'Choose type: type (1) for green or (2) for red';
+                const colorChoice = prompt(typePrompt, '1');
+                const type = colorChoice === '2' ? 'red' : 'green';
+                tasks.push({ text: text, completed: false, type: type });
+                renderTasks();
+            }
         }
 
-        addBtn.addEventListener('click', addTask);
-        taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') addTask();
-        });
-
-        clearCompletedBtn.addEventListener('click', () => {
-            tasks = tasks.filter(task => !task.completed);
-            saveAndRender();
-        });
-
-        // العرض الأولي
+    function deleteTask(index) {
+        tasks.splice(index, 1);
         renderTasks();
-    </script>
+    }
+
+    function toggleTaskType(index) {
+        tasks[index].type = tasks[index].type === 'green' ? 'red' : 'green';
+        renderTasks();
+    }
+
+    function toggleComplete(index) {
+        tasks[index].completed = !tasks[index].completed;
+        renderTasks();
+    }
+
+    function toggleLanguage() {
+        currentLang = currentLang === 'ar' ? 'en' : 'ar';
+        const html = document.documentElement;
+        const mainTitle = document.getElementById('mainTitle');
+        const langText = document.getElementById('langText');
+        const addBtnText = document.getElementById('addBtnText');
+
+        if (currentLang === 'en') {
+            html.setAttribute('dir', 'ltr');
+            html.setAttribute('lang', 'en');
+            mainTitle.textContent = 'Daily Mission';
+            langText.textContent = 'العربية';
+            addBtnText.textContent = '+ Add task';
+        } else {
+            html.setAttribute('dir', 'rtl');
+            html.setAttribute('lang', 'ar');
+            mainTitle.textContent = 'مهمة اليوم';
+            langText.textContent = 'English';
+            addBtnText.textContent = '+ أضف مهمة';
+        }
+        renderTasks();
+    }
+
+    renderTasks();
+</script>
+
 </body>
 </html>
