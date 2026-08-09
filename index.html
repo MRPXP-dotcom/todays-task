@@ -1,259 +1,56 @@
-<!DOCTYPE html>
+   <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مهمة اليوم</title>
+    <title>Daily Mission</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-        body {
-            background-color: #f4f4f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            background-color: #ffffff;
-            width: 100%;
-            max-width: 480px;
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            position: relative;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e1b4b;
-        }
-        .lang-btn {
-            background: #f3f4f6;
-            border: 1px solid #e5e7eb;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #374151;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .add-btn-main {
-            background-color: #312e81;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 6px rgba(49, 46, 129, 0.2);
-        }
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .task-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .task-green {
-            background-color: #e8f5e9;
-            border-color: #c8e6c9;
-        }
-        .task-red {
-            background-color: #ffebee;
-            border-color: #ffcdd2;
-        }
-        .task-text {
-            font-size: 16px;
-            font-weight: 500;
-            color: #1f2937;
-            flex-grow: 1;
-            text-align: right;
-            padding: 0 10px;
-        }
-        .task-text.completed {
-            text-decoration: line-through;
-            color: #00796b;
-        }
-        .task-num {
-            background: #ffffff;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-            color: #4b5563;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .task-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .btn-check {
-            background-color: #2e7d32;
-            color: white;
-        }
-        .btn-uncheck {
-            background-color: #c62828;
-            color: white;
-        }
-        .btn-delete {
-            background-color: transparent;
-            color: #d32f2f;
-            font-size: 16px;
-        }
-        .empty-state {
-            text-align: center;
-            color: #9ca3af;
-            padding: 30px;
-            font-size: 15px;
-        }
+        body { background-color: #f9f7f2; font-family: sans-serif; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 400px; padding: 20px; border-radius: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 10px; }
+        button#add-btn { padding: 10px 20px; background: #394480; color: white; border: none; border-radius: 10px; cursor: pointer; }
+        .task-item { display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee; gap: 5px; }
+        .task-text { flex: 1; }
+        .completed { text-decoration: line-through; color: gray; }
+        .btn-action { border: none; background: none; cursor: pointer; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="appContainer">
-        <div class="header">
-            <button class="lang-btn" onclick="toggleLanguage()">
-                <span id="langText">English</span> 🌐
-            </button>
-            <h1 class="title" id="mainTitle">مهمة اليوم</h1>
-        </div>
-
-        <button class="add-btn-main" onclick="addNewTask()">
-            <span id="addBtnText">+ أضف مهمة</span>
-        </button>
-
-        <div class="task-list" id="taskList">
-            <!-- المهام ستظهر هنا ديناميكياً -->
-        </div>
+<div class="container">
+    <h1>Daily Mission</h1>
+    <div class="input-group">
+        <input type="text" id="task-input" placeholder="أضف مهمة جديدة...">
+        <button id="add-btn">إضافة</button>
     </div>
+    <div id="task-list"></div>
+</div>
 
-    <script>
-        let currentLang = 'ar';
-        let tasks = [
-            { text: 'تمرين يوم الاحد', completed: true, type: 'green' },
-            { text: 'تمرين يوم الاثنين', completed: false, type: 'red' },
-            { text: 'تمرين يوم الثلاثاء', completed: true, type: 'green' },
-            { text: 'عطيه قطع حبل افكاري اليوم', completed: false, type: 'red' }
-        ];
+<script>
+    const input = document.getElementById('task-input');
+    const btn = document.getElementById('add-btn');
+    const list = document.getElementById('task-list');
 
-        function renderTasks() {
-            const list = document.getElementById('taskList');
-            list.innerHTML = '';
+    btn.onclick = () => {
+        if (!input.value) return;
+        const div = document.createElement('div');
+        div.className = 'task-item';
+        div.innerHTML = `
+            <span class="task-text">${input.value}</span>
+            <button class="btn-action" onclick="toggleTask(this, true)">✔️</button>
+            <button class="btn-action" onclick="toggleTask(this, false)">❌</button>
+            <button class="btn-action" onclick="this.parentElement.remove()">🗑️</button>
+        `;
+        list.appendChild(div);
+        input.value = '';
+    };
 
-            if (tasks.length === 0) {
-                list.innerHTML = `<div class="empty-state" id="emptyText">${currentLang === 'ar' ? 'أضف أول مهمة لك' : 'Add your first task'}</div>`;
-                return;
-            }
-
-            tasks.forEach((task, index) => {
-                const item = document.createElement('div');
-                item.className = `task-item ${task.type === 'green' ? 'task-green' : 'task-red'}`;
-
-                item.innerHTML = `
-                    <div class="task-actions">
-                        <button class="action-btn btn-delete" onclick="deleteTask(${index})" title="حذف">🗑️</button>
-                        <button class="action-btn ${task.type === 'green' ? 'btn-uncheck' : 'btn-check'}" onclick="toggleTaskType(${index})">${task.type === 'green' ? '✕' : '✓'}</button>
-                        <button class="action-btn" style="background:transparent; color:${task.completed ? '#2e7d32':'#9ca3af'};" onclick="toggleComplete(${index})">✓</button>
-                    </div>
-                    <span class="task-text ${task.completed ? 'completed' : ''}">${task.text}</span>
-                    <div class="task-num">${index + 1}</div>
-                `;
-                list.appendChild(item);
-            });
-        }
-
-        function addNewTask() {
-            const promptText = currentLang === 'ar' ? 'أدخل نص المهمة الجديدة:' : 'Enter new task text:';
-            const text = prompt(promptText);
-            if (text && text.trim() !== '') {
-                const typePrompt = currentLang === 'ar' ? 'اختر النوع: اكتب (1) للأخضر أو (2) للأحمر' : 'Choose type: type (1) for green or (2) for red';
-                const colorChoice = prompt(typePrompt, '1');
-                const type = colorChoice === '2' ? 'red' : 'green';
-                tasks.push({ text: text, completed: false, type: type });
-                renderTasks();
-            }
-        }
-
-    function deleteTask(index) {
-        tasks.splice(index, 1);
-        renderTasks();
+    function toggleTask(btn, isDone) {
+        const text = btn.parentElement.querySelector('.task-text');
+        isDone ? text.classList.add('completed') : text.classList.remove('completed');
     }
-
-    function toggleTaskType(index) {
-        tasks[index].type = tasks[index].type === 'green' ? 'red' : 'green';
-        renderTasks();
-    }
-
-    function toggleComplete(index) {
-        tasks[index].completed = !tasks[index].completed;
-        renderTasks();
-    }
-
-    function toggleLanguage() {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        const html = document.documentElement;
-        const mainTitle = document.getElementById('mainTitle');
-        const langText = document.getElementById('langText');
-        const addBtnText = document.getElementById('addBtnText');
-
-        if (currentLang === 'en') {
-            html.setAttribute('dir', 'ltr');
-            html.setAttribute('lang', 'en');
-            mainTitle.textContent = 'Daily Mission';
-            langText.textContent = 'العربية';
-            addBtnText.textContent = '+ Add task';
-        } else {
-            html.setAttribute('dir', 'rtl');
-            html.setAttribute('lang', 'ar');
-            mainTitle.textContent = 'مهمة اليوم';
-            langText.textContent = 'English';
-            addBtnText.textContent = '+ أضف مهمة';
-        }
-        renderTasks();
-    }
-
-    renderTasks();
 </script>
 
 </body>
