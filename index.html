@@ -1,114 +1,251 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" id="root">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مهمة اليوم</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهمة اليوم - Today's Task</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --btn-bg: #5c6bc0;
+            --btn-hover: #3f51b5;
+            --border-color: #2c2c2c;
+            --danger-bg: #2a1a1a;
+            --danger-text: #ff5252;
+        }
 
-<!-- الأيقونات -->
-<link rel="icon" type="image/png" sizes="32x32" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
-<link rel="apple-touch-icon" sizes="180x180" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
+        [data-theme="light"] {
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --btn-bg: #4f46e5;
+            --btn-hover: #4338ca;
+            --border-color: #e5e7eb;
+            --danger-bg: #fee2e2;
+            --danger-text: #dc2626;
+        }
 
-<style>
-:root {
-    --bg: #ffffff;
-    --text: #202b43;
-    --accent: #3949ab;
-    --border: #e4e1d9;
-    --green: #3d9b7d;
-    --red: #d94b43;
-}
-body.dark-mode {
-    --bg: #1a1a1a;
-    --text: #e0e0e0;
-    --accent: #5c6bc0;
-    --border: #333333;
-}
-body { background: var(--bg); color: var(--text); font-family: sans-serif; padding: 20px; transition: 0.3s; }
-.app { width: min(100%, 800px); margin: auto; padding: 30px; border: 2px solid var(--border); border-radius: 30px; }
-.header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
-.controls { display: flex; gap: 10px; }
-.btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text); cursor: pointer; }
-.add-area { margin: 30px 0; }
-.add-btn { width: 100%; padding: 20px; border: 0; border-radius: 20px; background: var(--accent); color: white; font-weight: bold; cursor: pointer; }
-.input-area { display: none; flex-direction: column; gap: 10px; margin-top: 15px; }
-.input-area.show { display: flex; }
-input { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 15px; background: var(--bg); color: var(--text); }
-.save-btn { padding: 15px; border: 0; border-radius: 15px; background: var(--green); color: white; cursor: pointer; }
-.task { display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid var(--border); }
-</style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 450px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn, .lang-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover, .lang-btn:hover {
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+
+        .main-btn {
+            width: 100%;
+            background-color: var(--btn-bg);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .main-btn:hover {
+            background-color: var(--btn-hover);
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: rgba(128, 128, 128, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+
+        .task-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .task-text {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .task-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+        }
+
+        .delete-btn {
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85srem;
+        }
+
+        .delete-btn:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
+<body data-theme="dark">
 
-<body>
-<main class="app">
-    <header class="header">
-        <h1 id="title">مهمة اليوم</h1>
-        <div class="controls">
-            <button class="btn" id="themeBtn">تبديل المظهر</button>
-            <button class="btn" id="langBtn">English</button>
+    <div class="container">
+        <div class="header">
+            <h1 id="app-title">مهمة اليوم</h1>
+            <div class="controls">
+                <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
+                <button class="icon-btn" id="themeToggle" onclick="toggleTheme()">☀️</button>
+            </div>
         </div>
-    </header>
-    <section class="add-area">
-        <button class="add-btn" id="addBtn">إضافة مهمة</button>
-        <div class="input-area" id="inputArea">
-            <input id="taskInput" type="text" placeholder="اكتب المهمة...">
-            <input id="dateInput" type="datetime-local">
-            <button class="save-btn" id="saveBtn">حفظ</button>
+
+        <button class="main-btn" id="addBtn" onclick="addTask()">إضافة مهمة</button>
+
+        <div class="task-list" id="taskList">
+            <!-- سيتم إدراج المهام هنا -->
         </div>
-    </section>
-    <section id="taskList"></section>
-</main>
+    </div>
 
-<script>
-const themeBtn = document.getElementById("themeBtn");
-const langBtn = document.getElementById("langBtn");
-const addBtn = document.getElementById("addBtn");
-const inputArea = document.getElementById("inputArea");
-const saveBtn = document.getElementById("saveBtn");
-const taskList = document.getElementById("taskList");
+    <script>
+        let currentLang = 'ar';
+        let tasks = [
+            { id: 1, text: 'عمل', time: '12/08/2026 - 09:28 ص' },
+            { id: 2, text: 'تطوير', time: '16/08/2026 - 01:31 م' }
+        ];
 
-let isDark = localStorage.getItem("darkMode") === "true";
-if (isDark) document.body.classList.add("dark-mode");
+        function render() {
+            // تحديث النصوص بناءً على اللغة
+            document.getElementById('app-title').innerText = currentLang === 'ar' ? 'مهمة اليوم' : "Today's Task";
+            document.getElementById('addBtn').innerText = currentLang === 'ar' ? 'إضافة مهمة' : 'Add Task';
+            document.getElementById('langToggle').innerText = currentLang === 'ar' ? 'EN' : 'AR';
+            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
 
-themeBtn.onclick = () => {
-    isDark = !isDark;
-    document.body.classList.toggle("dark-mode", isDark);
-    localStorage.setItem("darkMode", isDark);
-};
+            // عرض المهام
+            const listEl = document.getElementById('taskList');
+            listEl.innerHTML = '';
+            
+            tasks.forEach((task, index) => {
+                const item = document.createElement('div');
+                item.className = 'task-item';
+                item.innerHTML = `
+                    <div class="task-info">
+                        <span class="task-text">${task.text}</span>
+                        <span class="task-time">${task.time}</span>
+                    </div>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">${currentLang === 'ar' ? 'حذف' : 'Delete'}</button>
+                `;
+                listEl.appendChild(item);
+            });
+        }
 
-addBtn.onclick = () => inputArea.classList.toggle("show");
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById('themeToggle');
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeBtn.innerText = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeBtn.innerText = '☀️';
+            }
+        }
 
-saveBtn.onclick = () => {
-    const text = document.getElementById("taskInput").value;
-    const date = document.getElementById("dateInput").value;
-    if (!text) return;
-    const task = { text, date };
-    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    tasks.push(task);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    render();
-    document.getElementById("taskInput").value = "";
-    inputArea.classList.remove("show");
-};
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            render();
+        }
 
-function render() {
-    taskList.innerHTML = "";
-    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    tasks.forEach((t, i) => {
-        taskList.innerHTML += `<div class="task">
-            <div>${i + 1}</div>
-            <div>${t.text}<br><small>${t.date || ""}</small></div>
-            <button class="btn" onclick="deleteTask(${i})">حذف</button>
-        </div>`;
-    });
-}
-function deleteTask(i) {
-    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    tasks.splice(i, 1);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    render();
-}
-render();
-</script>
+        function addTask() {
+            const textPrompt = currentLang === 'ar' ? 'أدخل اسم المهمة:' : 'Enter task name:';
+            const taskText = prompt(textPrompt);
+            if (taskText) {
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const ampm = hours >= 12 ? (currentLang === 'ar' ? 'م' : 'PM') : (currentLang === 'ar' ? 'ص' : 'AM');
+                const formattedHours = String(hours % 12 || 12).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const year = now.getFullYear();
+                
+                const timeString = `${day}/${month}/${year} - ${formattedHours}:${minutes} ${ampm}`;
+                
+                tasks.push({
+                    id: Date.now(),
+                    text: taskText,
+                    time: timeString
+                });
+                render();
+            }
+        }
+
+        function deleteTask(id) {
+            tasks = tasks.filter(t => t.id !== id);
+            render();
+        }
+
+        // التهيئة الأولية
+        render();
+    </script>
 </body>
 </html>
