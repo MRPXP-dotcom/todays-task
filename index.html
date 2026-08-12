@@ -230,7 +230,6 @@ body {
     font-size: 23px;
     font-weight: 700;
 
-    /* تثبيت الرقم وعدم تأثره باتجاه اللغة أو حالة المهمة */
     direction: ltr;
     unicode-bidi: isolate;
     text-align: center;
@@ -367,11 +366,6 @@ html.dark .task-input:focus {
     border-color: var(--blue);
 }
 
-/*
-   إصلاح الترقيم في الوضع الليلي:
-   الرقم يبقى واضحًا سواء كانت المهمة عادية
-   أو مكتملة أو فاشلة.
-*/
 html.dark .task-number {
     background: rgba(255,255,255,.12);
     color: #edf1f7;
@@ -383,8 +377,13 @@ html.dark .task.done .task-number {
 }
 
 html.dark .task.failed .task-number {
-    background: rgba(255,255,255,.12);
-    color: #edf1f7;
+    background: rgba(255,255,255,.65);
+    color: #202b43;
+}
+
+/* إصلاح ظهور النص ورقم المهمة الفاشلة في الوضع الليلي */
+html.dark .task.failed .task-text {
+    color: #202b43 !important;
 }
 
 html.dark .state-btn {
