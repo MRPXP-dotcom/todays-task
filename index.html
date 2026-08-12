@@ -1,251 +1,1285 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="root">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مهمة اليوم - Today's Task</title>
-    <style>
-        :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #e0e0e0;
-            --btn-bg: #5c6bc0;
-            --btn-hover: #3f51b5;
-            --border-color: #2c2c2c;
-            --danger-bg: #2a1a1a;
-            --danger-text: #ff5252;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مهمة اليوم</title>
 
-        [data-theme="light"] {
-            --bg-color: #f4f4f9;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --btn-bg: #4f46e5;
-            --btn-hover: #4338ca;
-            --border-color: #e5e7eb;
-            --danger-bg: #fee2e2;
-            --danger-text: #dc2626;
-        }
+<link rel="icon" type="image/png" sizes="32x32" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
+<link rel="icon" type="image/png" sizes="16x16" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
+<link rel="apple-touch-icon" sizes="180x180" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
+<link rel="shortcut icon" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
 
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.3s, color 0.3s;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        .container {
-            background-color: var(--card-bg);
-            width: 100%;
-            max-width: 450px;
-            padding: 24px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            box-sizing: border-box;
-        }
+:root {
+    --blue: #3949ab;
+    --green: #3d9b7d;
+    --green-bg: #edf8f5;
+    --green-border: #b8ddd3;
+    --red: #d94b43;
+    --red-bg: #fff0f0;
+    --red-border: #efbaba;
+    --dark: #202b43;
+    --muted: #69738b;
+    --border: #e4e1d9;
+    --cream: #f7f4ea;
+}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+body {
+    min-height: 100vh;
+    padding: clamp(14px, 3vw, 32px);
+    background: var(--cream);
+    color: var(--dark);
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
 
-        h1 {
-            font-size: 1.5rem;
-            margin: 0;
-        }
+    transition: background .25s ease, color .25s ease;
+}
 
-        .controls {
-            display: flex;
-            gap: 8px;
-        }
+.app {
+    width: min(100%, 800px);
+    min-height: calc(100vh - clamp(28px, 6vw, 64px));
+    margin: auto;
+    padding: clamp(24px, 5vw, 42px);
+    background: #fff;
+    border: 2px solid #e6e2d9;
+    border-radius: clamp(28px, 5vw, 48px);
 
-        .icon-btn, .lang-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
+    transition: background .25s ease, border-color .25s ease;
+}
 
-        .icon-btn:hover, .lang-btn:hover {
-            background-color: rgba(128, 128, 128, 0.1);
-        }
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: clamp(22px, 4vw, 34px);
+    border-bottom: 2px solid #e5e1d8;
+}
 
-        .main-btn {
-            width: 100%;
-            background-color: var(--btn-bg);
-            color: #ffffff;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: background-color 0.2s;
-        }
+.title {
+    color: var(--blue);
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 800;
+    line-height: 1.1;
+}
 
-        .main-btn:hover {
-            background-color: var(--btn-hover);
-        }
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+.lang {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 0 20px;
+    border: 2px solid #e5e1d8;
+    border-radius: 30px;
+    background: #fafafa;
+    color: var(--dark);
+    font-size: clamp(15px, 2.5vw, 20px);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
 
-        .task-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background-color: rgba(128, 128, 128, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-        }
+.theme-btn {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border: 2px solid #e5e1d8;
+    border-radius: 50%;
+    background: #fafafa;
+    color: var(--dark);
+    font-size: 22px;
+    cursor: pointer;
+    transition: .25s ease;
+}
 
-        .task-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
+.theme-btn:hover {
+    transform: scale(1.04);
+}
 
-        .task-text {
-            font-size: 1rem;
-            font-weight: 500;
-        }
+.add-area {
+    margin: clamp(24px, 4vw, 42px) 0;
+}
 
-        .task-time {
-            font-size: 0.75rem;
-            opacity: 0.7;
-        }
+.add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 72px;
+    padding: 0 32px;
+    border: 0;
+    border-radius: 25px;
+    background: var(--blue);
+    color: #fff;
+    font-size: clamp(19px, 3vw, 26px);
+    font-weight: 700;
+    cursor: pointer;
+}
 
-        .delete-btn {
-            background-color: var(--danger-bg);
-            color: var(--danger-text);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85srem;
-        }
+.plus {
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1;
+}
 
-        .delete-btn:hover {
-            opacity: 0.8;
-        }
-    </style>
+.input-area {
+    display: none;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.input-area.show {
+    display: flex;
+}
+
+.task-input {
+    flex: 1;
+    min-width: 0;
+    height: 58px;
+    padding: 0 18px;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    outline: none;
+    color: var(--dark);
+    background: #fff;
+    font-size: 17px;
+}
+
+.task-input:focus {
+    border-color: var(--blue);
+}
+
+.time-input {
+    width: 145px;
+    height: 58px;
+    padding: 0 14px;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    outline: none;
+    color: var(--dark);
+    background: #fff;
+    font-size: 17px;
+}
+
+.time-input:focus {
+    border-color: var(--blue);
+}
+
+.save-btn {
+    min-width: 90px;
+    border: 0;
+    border-radius: 18px;
+    background: var(--green);
+    color: white;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.empty {
+    padding: 70px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: clamp(19px, 3vw, 27px);
+}
+
+.tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.task {
+    display: grid;
+    grid-template-columns: 58px 1fr auto;
+    align-items: center;
+    gap: clamp(12px, 2vw, 22px);
+    min-height: 128px;
+    padding: 18px 20px;
+    border: 2px solid;
+    border-radius: 28px;
+    transition: .2s ease;
+}
+
+.task.done {
+    background: var(--green-bg);
+    border-color: var(--green-border);
+}
+
+.task.failed {
+    background: var(--red-bg);
+    border-color: var(--red-border);
+}
+
+.task-number {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: rgba(255,255,255,.65);
+    color: var(--muted);
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.task-text {
+    min-width: 0;
+    color: var(--dark);
+    font-size: clamp(18px, 3vw, 27px);
+    font-weight: 600;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+
+.task.done .task-text {
+    color: var(--green);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.task-time {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.state-btn {
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
+    display: grid;
+    place-items: center;
+    border: 2px solid #e5e1d8;
+    border-radius: 22px;
+    background: transparent;
+    color: #68728c;
+    font-size: 39px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.state-btn.check.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+}
+
+.state-btn.cross.active {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+}
+
+.delete {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--red);
+    cursor: pointer;
+}
+
+.delete svg {
+    width: 34px;
+    height: 34px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* لوحة إعدادات صغيرة للنغمة */
+.sound-settings {
+    display: none;
+    margin-top: 10px;
+    padding: 12px;
+    border: 2px solid var(--border);
+    border-radius: 18px;
+    background: #fafafa;
+}
+
+.sound-settings.show {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sound-settings label {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sound-select {
+    flex: 1;
+    height: 42px;
+    padding: 0 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--dark);
+}
+
+/* التنبيه المرئي البسيط */
+.reminder {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translate(-50%, 120px);
+    z-index: 1000;
+    min-width: min(90%, 360px);
+    padding: 15px 20px;
+    border: 2px solid var(--green-border);
+    border-radius: 18px;
+    background: var(--green-bg);
+    color: var(--dark);
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 8px 30px rgba(0,0,0,.08);
+    opacity: 0;
+    pointer-events: none;
+    transition: .3s ease;
+}
+
+.reminder.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+}
+
+/* الوضع الليلي */
+html.dark {
+    --dark: #edf1f7;
+    --muted: #aeb7c8;
+    --border: #3a4355;
+    --cream: #111722;
+}
+
+html.dark body {
+    background: #111722;
+}
+
+html.dark .app {
+    background: #1a2130;
+    border-color: #30394b;
+}
+
+html.dark .header {
+    border-bottom-color: #30394b;
+}
+
+html.dark .lang,
+html.dark .theme-btn {
+    background: #222b3c;
+    border-color: #3a4355;
+    color: #edf1f7;
+}
+
+html.dark .task-input,
+html.dark .time-input {
+    background: #202938;
+    border-color: #3a4355;
+    color: #edf1f7;
+}
+
+html.dark .sound-settings {
+    background: #202938;
+    border-color: #3a4355;
+}
+
+html.dark .sound-select {
+    background: #1a2130;
+    border-color: #3a4355;
+    color: #edf1f7;
+}
+
+html.dark .state-btn {
+    border-color: #3a4355;
+}
+
+html.dark .reminder {
+    background: #202d2a;
+    border-color: #406c60;
+    color: #edf1f7;
+}
+
+html[dir="ltr"] .task {
+    grid-template-columns: auto 1fr 58px;
+}
+
+html[dir="ltr"] .task-number {
+    grid-column: 3;
+}
+
+html[dir="ltr"] .task-text {
+    grid-column: 2;
+}
+
+html[dir="ltr"] .actions {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+@media (max-width: 600px) {
+    body { padding: 10px; }
+
+    .app {
+        min-height: calc(100vh - 20px);
+        padding: 22px 16px;
+        border-radius: 28px;
+    }
+
+    .header { gap: 10px; }
+
+    .header-controls {
+        gap: 5px;
+    }
+
+    .lang {
+        min-height: 42px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+
+    .theme-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 19px;
+    }
+
+    .add-btn {
+        width: 100%;
+        min-height: 62px;
+        border-radius: 21px;
+    }
+
+    .task {
+        grid-template-columns: 44px 1fr auto;
+        gap: 9px;
+        min-height: 104px;
+        padding: 13px;
+        border-radius: 22px;
+    }
+
+    .task-number {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        font-size: 18px;
+    }
+
+    .actions { gap: 5px; }
+
+    .state-btn {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+        border-radius: 16px;
+        font-size: 30px;
+    }
+
+    .delete {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .delete svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    html[dir="ltr"] .task {
+        grid-template-columns: auto 1fr 44px;
+    }
+
+    .input-area {
+        flex-direction: column;
+    }
+
+    .task-input,
+    .time-input,
+    .save-btn {
+        width: 100%;
+        min-height: 54px;
+    }
+}
+</style>
 </head>
-<body data-theme="dark">
 
-    <div class="container">
-        <div class="header">
-            <h1 id="app-title">مهمة اليوم</h1>
-            <div class="controls">
-                <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">EN</button>
-                <button class="icon-btn" id="themeToggle" onclick="toggleTheme()">☀️</button>
-            </div>
+<body>
+
+<main class="app">
+
+    <header class="header">
+
+        <h1 class="title" id="title">مهمة اليوم</h1>
+
+        <div class="header-controls">
+
+            <button class="lang" id="langBtn">
+                <span id="langText">English</span>
+                <span>文A</span>
+            </button>
+
+            <button class="theme-btn" id="themeBtn" aria-label="تغيير المظهر">
+                ☾
+            </button>
+
         </div>
 
-        <button class="main-btn" id="addBtn" onclick="addTask()">إضافة مهمة</button>
+    </header>
 
-        <div class="task-list" id="taskList">
-            <!-- سيتم إدراج المهام هنا -->
+    <section class="add-area">
+
+        <button class="add-btn" id="addBtn">
+            <span class="plus">＋</span>
+            <span id="addText">أضف مهمة</span>
+        </button>
+
+        <div class="input-area" id="inputArea">
+
+            <input
+                id="taskInput"
+                class="task-input"
+                type="text"
+                autocomplete="off"
+                placeholder="اكتب المهمة..."
+            >
+
+            <input
+                id="taskTime"
+                class="time-input"
+                type="time"
+                aria-label="وقت المهمة"
+            >
+
+            <button class="save-btn" id="saveBtn">
+                إضافة
+            </button>
+
         </div>
+
+        <div class="sound-settings" id="soundSettings">
+
+            <label id="soundLabel">نغمة التنبيه</label>
+
+            <select id="soundSelect" class="sound-select">
+                <option value="soft">هادئة</option>
+                <option value="bell">جرس خفيف</option>
+                <option value="double">نغمتان خفيفتان</option>
+                <option value="none">بدون صوت</option>
+            </select>
+
+        </div>
+
+    </section>
+
+    <section id="taskList" class="tasks"></section>
+
+    <div id="empty" class="empty">
+        أضف أول مهمة لك
     </div>
 
-    <script>
-        let currentLang = 'ar';
-        let tasks = [
-            { id: 1, text: 'عمل', time: '12/08/2026 - 09:28 ص' },
-            { id: 2, text: 'تطوير', time: '16/08/2026 - 01:31 م' }
-        ];
+</main>
 
-        function render() {
-            // تحديث النصوص بناءً على اللغة
-            document.getElementById('app-title').innerText = currentLang === 'ar' ? 'مهمة اليوم' : "Today's Task";
-            document.getElementById('addBtn').innerText = currentLang === 'ar' ? 'إضافة مهمة' : 'Add Task';
-            document.getElementById('langToggle').innerText = currentLang === 'ar' ? 'EN' : 'AR';
-            document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+<div id="reminder" class="reminder"></div>
 
-            // عرض المهام
-            const listEl = document.getElementById('taskList');
-            listEl.innerHTML = '';
-            
-            tasks.forEach((task, index) => {
-                const item = document.createElement('div');
-                item.className = 'task-item';
-                item.innerHTML = `
-                    <div class="task-info">
-                        <span class="task-text">${task.text}</span>
-                        <span class="task-time">${task.time}</span>
-                    </div>
-                    <button class="delete-btn" onclick="deleteTask(${task.id})">${currentLang === 'ar' ? 'حذف' : 'Delete'}</button>
-                `;
-                listEl.appendChild(item);
+<script>
+
+const root = document.getElementById("root");
+const title = document.getElementById("title");
+const langBtn = document.getElementById("langBtn");
+const langText = document.getElementById("langText");
+const addBtn = document.getElementById("addBtn");
+const addText = document.getElementById("addText");
+const inputArea = document.getElementById("inputArea");
+const taskInput = document.getElementById("taskInput");
+const taskTime = document.getElementById("taskTime");
+const saveBtn = document.getElementById("saveBtn");
+const taskList = document.getElementById("taskList");
+const empty = document.getElementById("empty");
+const themeBtn = document.getElementById("themeBtn");
+const soundSettings = document.getElementById("soundSettings");
+const soundSelect = document.getElementById("soundSelect");
+const soundLabel = document.getElementById("soundLabel");
+const reminder = document.getElementById("reminder");
+
+let lang = localStorage.getItem("language") || "ar";
+
+let tasks;
+
+try {
+    tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    if (!Array.isArray(tasks)) tasks = [];
+} catch {
+    tasks = [];
+}
+
+let darkMode = localStorage.getItem("darkMode") === "true";
+
+let soundType = localStorage.getItem("soundType") || "soft";
+
+const text = {
+
+    ar: {
+        title: "مهمة اليوم",
+        language: "English",
+        add: "أضف مهمة",
+        input: "اكتب المهمة...",
+        save: "إضافة",
+        empty: "أضف أول مهمة لك",
+        sound: "نغمة التنبيه",
+        soft: "هادئة",
+        bell: "جرس خفيف",
+        double: "نغمتان خفيفتان",
+        none: "بدون صوت",
+        reminder: "حان وقت المهمة: ",
+        time: "الوقت"
+    },
+
+    en: {
+        title: "Daily Mission",
+        language: "العربية",
+        add: "Add task",
+        input: "Write your task...",
+        save: "Add",
+        empty: "Add your first task",
+        sound: "Reminder sound",
+        soft: "Soft",
+        bell: "Light bell",
+        double: "Two soft tones",
+        none: "No sound",
+        reminder: "Task time: ",
+        time: "Time"
+    }
+
+};
+
+
+/* حفظ البيانات */
+
+function save() {
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+    localStorage.setItem(
+        "language",
+        lang
+    );
+
+    localStorage.setItem(
+        "darkMode",
+        darkMode
+    );
+
+    localStorage.setItem(
+        "soundType",
+        soundType
+    );
+}
+
+
+/* الوضع الليلي */
+
+function applyTheme() {
+
+    root.classList.toggle("dark", darkMode);
+
+    themeBtn.textContent = darkMode ? "☀" : "☾";
+
+    themeBtn.setAttribute(
+        "aria-label",
+        darkMode
+            ? (lang === "ar" ? "الوضع العادي" : "Light mode")
+            : (lang === "ar" ? "الوضع الليلي" : "Dark mode")
+    );
+}
+
+
+/* تغيير اللغة */
+
+function renderLanguage() {
+
+    root.dir = lang === "ar" ? "rtl" : "ltr";
+
+    root.lang = lang;
+
+    title.textContent = text[lang].title;
+
+    langText.textContent = text[lang].language;
+
+    addText.textContent = text[lang].add;
+
+    taskInput.placeholder = text[lang].input;
+
+    saveBtn.textContent = text[lang].save;
+
+    empty.textContent = text[lang].empty;
+
+    soundLabel.textContent = text[lang].sound;
+
+    soundSelect.options[0].textContent = text[lang].soft;
+    soundSelect.options[1].textContent = text[lang].bell;
+    soundSelect.options[2].textContent = text[lang].double;
+    soundSelect.options[3].textContent = text[lang].none;
+
+    applyTheme();
+}
+
+
+/* رسم المهام */
+
+function render() {
+
+    renderLanguage();
+
+    taskList.innerHTML = "";
+
+    empty.style.display =
+        tasks.length ? "none" : "block";
+
+    tasks.forEach((task, index) => {
+
+        const item = document.createElement("article");
+
+        item.className =
+            "task " +
+            (
+                task.status === "done"
+                    ? "done"
+                    : task.status === "failed"
+                        ? "failed"
+                        : ""
+            );
+
+        item.innerHTML = `
+
+            <div class="task-number">
+                ${index + 1}
+            </div>
+
+            <div class="task-text">
+
+            </div>
+
+            <div class="actions">
+
+                <button
+                    class="state-btn cross ${
+                        task.status === "failed"
+                            ? "active"
+                            : ""
+                    }"
+                    data-action="failed"
+                >
+                    ×
+                </button>
+
+                <button
+                    class="state-btn check ${
+                        task.status === "done"
+                            ? "active"
+                            : ""
+                    }"
+                    data-action="done"
+                >
+                    ✓
+                </button>
+
+                <button
+                    class="delete"
+                    data-action="delete"
+                >
+
+                    <svg viewBox="0 0 24 24">
+
+                        <path d="M4 7h16"/>
+                        <path d="M9 7V4h6v3"/>
+                        <path d="M6 7l1 13h10l1-13"/>
+                        <path d="M10 11v5"/>
+                        <path d="M14 11v5"/>
+
+                    </svg>
+
+                </button>
+
+            </div>
+        `;
+
+        const taskText =
+            item.querySelector(".task-text");
+
+        taskText.textContent = task.text;
+
+        /* إظهار الوقت فقط إذا تم تحديده */
+
+        if (task.time) {
+
+            const timeElement =
+                document.createElement("div");
+
+            timeElement.className = "task-time";
+
+            timeElement.textContent =
+                `${text[lang].time}: ${formatTime(task.time)}`;
+
+            taskText.appendChild(timeElement);
+        }
+
+
+        item.querySelectorAll("[data-action]")
+            .forEach(button => {
+
+                button.onclick = () => {
+
+                    const action =
+                        button.dataset.action;
+
+                    if (action === "delete") {
+
+                        tasks.splice(index, 1);
+
+                    } else {
+
+                        tasks[index].status =
+                            tasks[index].status === action
+                                ? ""
+                                : action;
+
+                    }
+
+                    save();
+
+                    render();
+                };
+
             });
+
+
+        taskList.appendChild(item);
+
+    });
+
+}
+
+
+/* تحويل الوقت إلى صيغة مناسبة */
+
+function formatTime(time) {
+
+    if (!time) return "";
+
+    const [hour, minute] =
+        time.split(":").map(Number);
+
+    if (lang === "en") {
+
+        const suffix =
+            hour >= 12 ? "PM" : "AM";
+
+        const h =
+            hour % 12 || 12;
+
+        return `${h}:${String(minute).padStart(2, "0")} ${suffix}`;
+
+    }
+
+    return time;
+}
+
+
+/* إنشاء صوت التنبيه */
+
+function playTone(type) {
+
+    if (type === "none") return;
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        if (!AudioContext) return;
+
+        const ctx =
+            new AudioContext();
+
+        function tone(
+            frequency,
+            start,
+            duration,
+            volume
+        ) {
+
+            const oscillator =
+                ctx.createOscillator();
+
+            const gain =
+                ctx.createGain();
+
+            oscillator.type = "sine";
+
+            oscillator.frequency.value =
+                frequency;
+
+            gain.gain.setValueAtTime(
+                0,
+                ctx.currentTime + start
+            );
+
+            gain.gain.linearRampToValueAtTime(
+                volume,
+                ctx.currentTime + start + 0.02
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
+                ctx.currentTime + start + duration
+            );
+
+            oscillator.connect(gain);
+
+            gain.connect(ctx.destination);
+
+            oscillator.start(
+                ctx.currentTime + start
+            );
+
+            oscillator.stop(
+                ctx.currentTime + start + duration + 0.03
+            );
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeBtn = document.getElementById('themeToggle');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                themeBtn.innerText = '🌙';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeBtn.innerText = '☀️';
-            }
+
+        if (type === "soft") {
+
+            tone(660, 0, 0.35, 0.08);
+
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            render();
+        else if (type === "bell") {
+
+            tone(880, 0, 0.45, 0.07);
+
         }
 
-        function addTask() {
-            const textPrompt = currentLang === 'ar' ? 'أدخل اسم المهمة:' : 'Enter task name:';
-            const taskText = prompt(textPrompt);
-            if (taskText) {
-                const now = new Date();
-                const hours = now.getHours();
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const ampm = hours >= 12 ? (currentLang === 'ar' ? 'م' : 'PM') : (currentLang === 'ar' ? 'ص' : 'AM');
-                const formattedHours = String(hours % 12 || 12).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const year = now.getFullYear();
-                
-                const timeString = `${day}/${month}/${year} - ${formattedHours}:${minutes} ${ampm}`;
-                
-                tasks.push({
-                    id: Date.now(),
-                    text: taskText,
-                    time: timeString
-                });
-                render();
-            }
+        else if (type === "double") {
+
+            tone(660, 0, 0.3, 0.07);
+
+            tone(880, 0.38, 0.3, 0.06);
+
         }
 
-        function deleteTask(id) {
-            tasks = tasks.filter(t => t.id !== id);
-            render();
+        setTimeout(() => {
+
+            try {
+                ctx.close();
+            } catch {}
+
+        }, 1500);
+
+    } catch {}
+
+}
+
+
+/* إظهار التنبيه */
+
+function showReminder(task) {
+
+    const message =
+        text[lang].reminder +
+        task.text;
+
+    reminder.textContent = message;
+
+    reminder.classList.add("show");
+
+    playTone(soundType);
+
+    setTimeout(() => {
+
+        reminder.classList.remove("show");
+
+    }, 5000);
+
+}
+
+
+/*
+    فحص أوقات المهام.
+
+    يتم فحص الوقت كل ثانية.
+*/
+
+function checkReminders() {
+
+    const now = new Date();
+
+    const currentHour =
+        String(now.getHours()).padStart(2, "0");
+
+    const currentMinute =
+        String(now.getMinutes()).padStart(2, "0");
+
+    const currentTime =
+        `${currentHour}:${currentMinute}`;
+
+    const today =
+        `${now.getFullYear()}-${String(
+            now.getMonth() + 1
+        ).padStart(2, "0")}-${String(
+            now.getDate()
+        ).padStart(2, "0")}`;
+
+
+    let changed = false;
+
+
+    tasks.forEach(task => {
+
+        /*
+            المهمة الموجودة في النسخ القديمة
+            لا تحتوي على time، لذلك نتجاهلها.
+        */
+
+        if (!task.time) return;
+
+        if (task.status !== "") return;
+
+        if (task.lastAlertDate === today) return;
+
+        if (task.time === currentTime) {
+
+            showReminder(task);
+
+            task.lastAlertDate = today;
+
+            changed = true;
         }
 
-        // التهيئة الأولية
-        render();
-    </script>
+    });
+
+
+    if (changed) save();
+
+}
+
+
+/* فتح وإغلاق إضافة المهمة */
+
+addBtn.onclick = () => {
+
+    inputArea.classList.toggle("show");
+
+    soundSettings.classList.toggle(
+        "show",
+        inputArea.classList.contains("show")
+    );
+
+    if (
+        inputArea.classList.contains("show")
+    ) {
+
+        taskInput.focus();
+
+    }
+
+};
+
+
+/* حفظ مهمة جديدة */
+
+saveBtn.onclick = () => {
+
+    const value =
+        taskInput.value.trim();
+
+    if (!value) {
+
+        taskInput.focus();
+
+        return;
+    }
+
+
+    tasks.push({
+
+        text: value,
+
+        status: "",
+
+        time: taskTime.value || "",
+
+        lastAlertDate: ""
+
+    });
+
+
+    taskInput.value = "";
+
+    taskTime.value = "";
+
+    inputArea.classList.remove("show");
+
+    soundSettings.classList.remove("show");
+
+    save();
+
+    render();
+
+};
+
+
+/* Enter / Escape */
+
+taskInput.addEventListener(
+    "keydown",
+    e => {
+
+        if (e.key === "Enter") {
+
+            saveBtn.onclick();
+
+        }
+
+        if (e.key === "Escape") {
+
+            inputArea.classList.remove("show");
+
+            soundSettings.classList.remove("show");
+
+            taskInput.value = "";
+
+            taskTime.value = "";
+
+        }
+
+    }
+);
+
+
+/* اللغة */
+
+langBtn.onclick = () => {
+
+    lang =
+        lang === "ar"
+            ? "en"
+            : "ar";
+
+    save();
+
+    render();
+
+};
+
+
+/* الوضع الليلي */
+
+themeBtn.onclick = () => {
+
+    darkMode = !darkMode;
+
+    save();
+
+    applyTheme();
+
+};
+
+
+/* اختيار النغمة */
+
+soundSelect.value = soundType;
+
+soundSelect.onchange = () => {
+
+    soundType =
+        soundSelect.value;
+
+    save();
+
+};
+
+
+/*
+    تشغيل فحص التنبيهات.
+
+    يتم تشغيل الفحص حتى أثناء بقاء الصفحة مفتوحة.
+*/
+
+setInterval(
+    checkReminders,
+    1000
+);
+
+
+/*
+    عند العودة إلى الصفحة
+    نفحص المهمة فوراً.
+*/
+
+document.addEventListener(
+    "visibilitychange",
+    () => {
+
+        if (!document.hidden) {
+
+            checkReminders();
+
+        }
+
+    }
+);
+
+
+/* التشغيل الأول */
+
+soundSelect.value = soundType;
+
+render();
+
+checkReminders();
+
+</script>
+
 </body>
 </html>
