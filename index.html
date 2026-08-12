@@ -7,7 +7,7 @@
     <!-- العنوان الصافي والمثالي ليظهر كاملاً تحت الأيقونة وفي المتصفح -->
     <title>Daily Mission</title>
     
-    <!-- الوصف والكلمات المفتاحية لمحركات البحث (جوجل يقرؤها كاملة بالخلفية) -->
+    <!-- الوصف والكلمات المفتاحية لمحركات البحث -->
     <meta name="description" content="تطبيق Daily Mission: أداة ذكية لتنظيم مهام العمل، مهام المطبخ، السوق، المدرسة، وإنجاز كافة المهام اليومية بسهولة واحترافية.">
     <meta name="keywords" content="مهمة اليوم, Daily Mission, مهام العمل, مهام المطبخ, مهام السوق, مهام الطبيب, مهمة رائد الفضاء, مهام رجل الاعمال, مهمة المبرمجين, مهام المدرسة, إنجاز المهام">
     <meta name="author" content="Naif Abdullah Al-Ghamdi">
@@ -254,6 +254,7 @@ body {
     font-weight: 600;
     line-height: 1.35;
     overflow-wrap: anywhere;
+    user-select: none;
 }
 
 .task.done .task-text {
@@ -505,7 +506,6 @@ html.dark .state-btn {
 
     <header class="header">
 
-        <!-- اسم التطبيق مع تلوين Daily باللون الأبيض و Mission باللون الأزرق داخل الواجهة -->
         <h1 class="title" id="title">
             <span style="color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.3);">Daily</span> 
             <span style="color: var(--blue);">Mission</span>
@@ -518,13 +518,11 @@ html.dark .state-btn {
                 <span>文A</span>
             </button>
 
-            <!-- الوضع الليلي -->
             <button
                 class="theme-btn"
                 id="themeBtn"
                 aria-label="الوضع الليلي"
             >
-                <!-- أيقونة الهلال والقمر تتغير حسب الوضع -->
             </button>
 
         </div>
@@ -600,8 +598,6 @@ try {
 
 }
 
-
-/* حفظ الوضع الليلي */
 let darkMode =
     localStorage.getItem("darkMode") === "true";
 
@@ -631,10 +627,6 @@ const text = {
 };
 
 
-/* =========================================================
-   الحفظ
-   ========================================================= */
-
 function save() {
 
     localStorage.setItem(
@@ -655,10 +647,6 @@ function save() {
 }
 
 
-/* =========================================================
-   الوضع الليلي (أيقونة SVG متناسقة مع اللون)
-   ========================================================= */
-
 function applyTheme() {
 
     root.classList.toggle(
@@ -666,7 +654,6 @@ function applyTheme() {
         darkMode
     );
 
-    // إذا كان الوضع الليلي مفعل، نعرض أيقونة الشمس البيضاء، وإذا كان الوضع العادي نعرض الهلال
     if (darkMode) {
         themeBtn.innerHTML = `
             <svg viewBox="0 0 24 24">
@@ -684,10 +671,6 @@ function applyTheme() {
 
 }
 
-
-/* =========================================================
-   عرض الصفحة
-   ========================================================= */
 
 function render() {
 
@@ -795,10 +778,44 @@ function render() {
         `;
 
 
-        item.querySelector(
-            ".task-text"
-        ).textContent =
-            task.text;
+        const textDiv = item.querySelector(".task-text");
+        textDiv.textContent = task.text;
+
+        // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
+        textDiv.addEventListener("dblclick", () => {
+            if (task.status === "done" || task.status === "failed") {
+                return; // مقفل إذا كان منجزاً أو متعثراً
+            }
+
+            const currentText = task.text;
+            const inputField = document.createElement("input");
+            inputField.type = "text";
+            inputField.value = currentText;
+            inputField.className = "task-input";
+            inputField.style.height = "42px";
+            inputField.style.fontSize = "inherit";
+
+            textDiv.replaceWith(inputField);
+            inputField.focus();
+
+            const saveEdit = () => {
+                const newText = inputField.value.trim();
+                if (newText) {
+                    tasks[index].text = newText;
+                    save();
+                }
+                render();
+            };
+
+            inputField.addEventListener("blur", saveEdit);
+            inputField.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    saveEdit();
+                } else if (e.key === "Escape") {
+                    render();
+                }
+            });
+        });
 
 
         item.querySelectorAll(
@@ -847,10 +864,6 @@ function render() {
 }
 
 
-/* =========================================================
-   تغيير اللغة
-   ========================================================= */
-
 langBtn.onclick = () => {
 
     lang =
@@ -864,10 +877,6 @@ langBtn.onclick = () => {
 
 };
 
-
-/* =========================================================
-   إضافة مهمة
-   ========================================================= */
 
 addBtn.onclick = () => {
 
@@ -883,10 +892,6 @@ addBtn.onclick = () => {
 
 };
 
-
-/* =========================================================
-   حفظ المهمة
-   ========================================================= */
 
 saveBtn.onclick = () => {
 
@@ -923,10 +928,6 @@ saveBtn.onclick = () => {
 };
 
 
-/* =========================================================
-   لوحة المفاتيح
-   ========================================================= */
-
 taskInput.addEventListener(
     "keydown",
     e => {
@@ -951,10 +952,6 @@ taskInput.addEventListener(
 );
 
 
-/* =========================================================
-   الوضع الليلي
-   ========================================================= */
-
 themeBtn.onclick = () => {
 
     darkMode =
@@ -966,10 +963,6 @@ themeBtn.onclick = () => {
 
 };
 
-
-/* =========================================================
-   التشغيل
-   ========================================================= */
 
 render();
 
