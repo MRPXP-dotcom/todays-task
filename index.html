@@ -5,402 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مهمة اليوم</title>
 
-<!-- الأيقونات لضمان ظهور الشعار على كافة الأجهزة -->
+<!-- الأيقونات -->
 <link rel="icon" type="image/png" sizes="32x32" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
-<link rel="icon" type="image/png" sizes="16x16" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
 <link rel="apple-touch-icon" sizes="180x180" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
-<link rel="shortcut icon" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 :root {
-    --blue: #3949ab;
-    --green: #3d9b7d;
-    --green-bg: #edf8f5;
-    --green-border: #b8ddd3;
-    --red: #d94b43;
-    --red-bg: #fff0f0;
-    --red-border: #efbaba;
-    --dark: #202b43;
-    --muted: #69738b;
+    --bg: #ffffff;
+    --text: #202b43;
+    --accent: #3949ab;
     --border: #e4e1d9;
-    --cream: #f7f4ea;
+    --green: #3d9b7d;
+    --red: #d94b43;
 }
-
-body {
-    min-height: 100vh;
-    padding: clamp(14px, 3vw, 32px);
-    background: var(--cream);
-    color: var(--dark);
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
+body.dark-mode {
+    --bg: #1a1a1a;
+    --text: #e0e0e0;
+    --accent: #5c6bc0;
+    --border: #333333;
 }
-
-.app {
-    width: min(100%, 800px);
-    min-height: calc(100vh - clamp(28px, 6vw, 64px));
-    margin: auto;
-    padding: clamp(24px, 5vw, 42px);
-    background: #fff;
-    border: 2px solid #e6e2d9;
-    border-radius: clamp(28px, 5vw, 48px);
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: clamp(22px, 4vw, 34px);
-    border-bottom: 2px solid #e5e1d8;
-}
-
-.title {
-    color: var(--blue);
-    font-size: clamp(28px, 5vw, 46px);
-    font-weight: 800;
-    line-height: 1.1;
-}
-
-.lang {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 48px;
-    padding: 0 20px;
-    border: 2px solid #e5e1d8;
-    border-radius: 30px;
-    background: #fafafa;
-    color: var(--dark);
-    font-size: clamp(15px, 2.5vw, 20px);
-    font-weight: 600;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.add-area {
-    margin: clamp(24px, 4vw, 42px) 0;
-}
-
-.add-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    min-height: 72px;
-    padding: 0 32px;
-    border: 0;
-    border-radius: 25px;
-    background: var(--blue);
-    color: #fff;
-    font-size: clamp(19px, 3vw, 26px);
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.plus {
-    font-size: 34px;
-    font-weight: 300;
-    line-height: 1;
-}
-
-.input-area {
-    display: none;
-    gap: 10px;
-    margin-top: 14px;
-}
-
-.input-area.show {
-    display: flex;
-}
-
-.task-input {
-    flex: 1;
-    min-width: 0;
-    height: 58px;
-    padding: 0 18px;
-    border: 2px solid var(--border);
-    border-radius: 18px;
-    outline: none;
-    color: var(--dark);
-    background: #fff;
-    font-size: 17px;
-}
-
-.task-input:focus {
-    border-color: var(--blue);
-}
-
-.save-btn {
-    min-width: 90px;
-    border: 0;
-    border-radius: 18px;
-    background: var(--green);
-    color: white;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.empty {
-    padding: 70px 20px;
-    text-align: center;
-    color: var(--muted);
-    font-size: clamp(19px, 3vw, 27px);
-}
-
-.tasks {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.task {
-    display: grid;
-    grid-template-columns: 58px 1fr auto;
-    align-items: center;
-    gap: clamp(12px, 2vw, 22px);
-    min-height: 128px;
-    padding: 18px 20px;
-    border: 2px solid;
-    border-radius: 28px;
-    transition: .2s ease;
-}
-
-.task.done {
-    background: var(--green-bg);
-    border-color: var(--green-border);
-}
-
-.task.failed {
-    background: var(--red-bg);
-    border-color: var(--red-border);
-}
-
-.task-number {
-    width: 58px;
-    height: 58px;
-    display: grid;
-    place-items: center;
-    border-radius: 18px;
-    background: rgba(255,255,255,.65);
-    color: var(--muted);
-    font-size: 23px;
-    font-weight: 700;
-}
-
-.task-text {
-    min-width: 0;
-    color: var(--dark);
-    font-size: clamp(18px, 3vw, 27px);
-    font-weight: 600;
-    line-height: 1.35;
-    overflow-wrap: anywhere;
-}
-
-.task.done .task-text {
-    color: var(--green);
-    text-decoration: line-through;
-    text-decoration-thickness: 2px;
-}
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.state-btn {
-    width: 72px;
-    height: 72px;
-    flex: 0 0 72px;
-    display: grid;
-    place-items: center;
-    border: 2px solid #e5e1d8;
-    border-radius: 22px;
-    background: transparent;
-    color: #68728c;
-    font-size: 39px;
-    font-weight: 300;
-    line-height: 1;
-    cursor: pointer;
-}
-
-.state-btn.check.active {
-    background: var(--green);
-    border-color: var(--green);
-    color: white;
-}
-
-.state-btn.cross.active {
-    background: var(--red);
-    border-color: var(--red);
-    color: white;
-}
-
-.delete {
-    width: 54px;
-    height: 54px;
-    flex: 0 0 54px;
-    display: grid;
-    place-items: center;
-    border: 0;
-    background: transparent;
-    color: var(--red);
-    cursor: pointer;
-}
-
-.delete svg {
-    width: 34px;
-    height: 34px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2.3;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-html[dir="ltr"] .task {
-    grid-template-columns: auto 1fr 58px;
-}
-
-html[dir="ltr"] .task-number {
-    grid-column: 3;
-}
-
-html[dir="ltr"] .task-text {
-    grid-column: 2;
-}
-
-html[dir="ltr"] .actions {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-@media (max-width: 600px) {
-    body { padding: 10px; }
-    .app { min-height: calc(100vh - 20px); padding: 22px 16px; border-radius: 28px; }
-    .header { gap: 10px; }
-    .lang { min-height: 42px; padding: 0 14px; font-size: 14px; }
-    .add-btn { width: 100%; min-height: 62px; border-radius: 21px; }
-    .task { grid-template-columns: 44px 1fr auto; gap: 9px; min-height: 104px; padding: 13px; border-radius: 22px; }
-    .task-number { width: 44px; height: 44px; border-radius: 14px; font-size: 18px; }
-    .actions { gap: 5px; }
-    .state-btn { width: 52px; height: 52px; flex-basis: 52px; border-radius: 16px; font-size: 30px; }
-    .delete { width: 42px; height: 42px; flex-basis: 42px; }
-    .delete svg { width: 28px; height: 28px; }
-    html[dir="ltr"] .task { grid-template-columns: auto 1fr 44px; }
-    .input-area { flex-direction: column; }
-    .task-input, .save-btn { width: 100%; min-height: 54px; }
-}
+body { background: var(--bg); color: var(--text); font-family: sans-serif; padding: 20px; transition: 0.3s; }
+.app { width: min(100%, 800px); margin: auto; padding: 30px; border: 2px solid var(--border); border-radius: 30px; }
+.header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
+.controls { display: flex; gap: 10px; }
+.btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text); cursor: pointer; }
+.add-area { margin: 30px 0; }
+.add-btn { width: 100%; padding: 20px; border: 0; border-radius: 20px; background: var(--accent); color: white; font-weight: bold; cursor: pointer; }
+.input-area { display: none; flex-direction: column; gap: 10px; margin-top: 15px; }
+.input-area.show { display: flex; }
+input { width: 100%; padding: 15px; border: 1px solid var(--border); border-radius: 15px; background: var(--bg); color: var(--text); }
+.save-btn { padding: 15px; border: 0; border-radius: 15px; background: var(--green); color: white; cursor: pointer; }
+.task { display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 15px; padding: 15px; border-bottom: 1px solid var(--border); }
 </style>
 </head>
 
 <body>
 <main class="app">
     <header class="header">
-        <h1 class="title" id="title">مهمة اليوم</h1>
-        <button class="lang" id="langBtn">
-            <span id="langText">English</span>
-            <span>文A</span>
-        </button>
+        <h1 id="title">مهمة اليوم</h1>
+        <div class="controls">
+            <button class="btn" id="themeBtn">تبديل المظهر</button>
+            <button class="btn" id="langBtn">English</button>
+        </div>
     </header>
     <section class="add-area">
-        <button class="add-btn" id="addBtn">
-            <span class="plus">＋</span>
-            <span id="addText">أضف مهمة</span>
-        </button>
+        <button class="add-btn" id="addBtn">إضافة مهمة</button>
         <div class="input-area" id="inputArea">
-            <input id="taskInput" class="task-input" type="text" autocomplete="off" placeholder="اكتب المهمة...">
-            <button class="save-btn" id="saveBtn">إضافة</button>
+            <input id="taskInput" type="text" placeholder="اكتب المهمة...">
+            <input id="dateInput" type="datetime-local">
+            <button class="save-btn" id="saveBtn">حفظ</button>
         </div>
     </section>
-    <section id="taskList" class="tasks"></section>
-    <div id="empty" class="empty">أضف أول مهمة لك</div>
+    <section id="taskList"></section>
 </main>
 
 <script>
-const root = document.getElementById("root");
-const title = document.getElementById("title");
+const themeBtn = document.getElementById("themeBtn");
 const langBtn = document.getElementById("langBtn");
-const langText = document.getElementById("langText");
 const addBtn = document.getElementById("addBtn");
-const addText = document.getElementById("addText");
 const inputArea = document.getElementById("inputArea");
-const taskInput = document.getElementById("taskInput");
 const saveBtn = document.getElementById("saveBtn");
 const taskList = document.getElementById("taskList");
-const empty = document.getElementById("empty");
 
-let lang = localStorage.getItem("language") || "ar";
-let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+let isDark = localStorage.getItem("darkMode") === "true";
+if (isDark) document.body.classList.add("dark-mode");
 
-const text = {
-    ar: { title: "مهمة اليوم", language: "English", add: "أضف مهمة", input: "اكتب المهمة...", save: "إضافة", empty: "أضف أول مهمة لك" },
-    en: { title: "Daily Mission", language: "العربية", add: "Add task", input: "Write your task...", save: "Add", empty: "Add your first task" }
+themeBtn.onclick = () => {
+    isDark = !isDark;
+    document.body.classList.toggle("dark-mode", isDark);
+    localStorage.setItem("darkMode", isDark);
 };
 
-function save() {
+addBtn.onclick = () => inputArea.classList.toggle("show");
+
+saveBtn.onclick = () => {
+    const text = document.getElementById("taskInput").value;
+    const date = document.getElementById("dateInput").value;
+    if (!text) return;
+    const task = { text, date };
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    tasks.push(task);
     localStorage.setItem("tasks", JSON.stringify(tasks));
-    localStorage.setItem("language", lang);
-}
+    render();
+    document.getElementById("taskInput").value = "";
+    inputArea.classList.remove("show");
+};
 
 function render() {
-    root.dir = lang === "ar" ? "rtl" : "ltr";
-    root.lang = lang;
-    title.textContent = text[lang].title;
-    langText.textContent = text[lang].language;
-    addText.textContent = text[lang].add;
-    taskInput.placeholder = text[lang].input;
-    saveBtn.textContent = text[lang].save;
-    empty.textContent = text[lang].empty;
     taskList.innerHTML = "";
-    empty.style.display = tasks.length ? "none" : "block";
-    tasks.forEach((task, index) => {
-        const item = document.createElement("article");
-        item.className = "task " + (task.status === "done" ? "done" : task.status === "failed" ? "failed" : "");
-        item.innerHTML = `
-            <div class="task-number">${index + 1}</div>
-            <div class="task-text"></div>
-            <div class="actions">
-                <button class="state-btn cross ${task.status === "failed" ? "active" : ""}" data-action="failed">×</button>
-                <button class="state-btn check ${task.status === "done" ? "active" : ""}" data-action="done">✓</button>
-                <button class="delete" data-action="delete">
-                    <svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/><path d="M10 11v5"/><path d="M14 11v5"/></svg>
-                </button>
-            </div>
-        `;
-        item.querySelector(".task-text").textContent = task.text;
-        item.querySelectorAll("[data-action]").forEach(button => {
-            button.onclick = () => {
-                const action = button.dataset.action;
-                if (action === "delete") tasks.splice(index, 1);
-                else tasks[index].status = tasks[index].status === action ? "" : action;
-                save(); render();
-            };
-        });
-        taskList.appendChild(item);
+    const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    tasks.forEach((t, i) => {
+        taskList.innerHTML += `<div class="task">
+            <div>${i + 1}</div>
+            <div>${t.text}<br><small>${t.date || ""}</small></div>
+            <button class="btn" onclick="deleteTask(${i})">حذف</button>
+        </div>`;
     });
 }
-
-langBtn.onclick = () => { lang = lang === "ar" ? "en" : "ar"; save(); render(); };
-addBtn.onclick = () => { inputArea.classList.toggle("show"); if(inputArea.classList.contains("show")) taskInput.focus(); };
-saveBtn.onclick = () => {
-    if (!taskInput.value.trim()) return taskInput.focus();
-    tasks.push({ text: taskInput.value.trim(), status: "" });
-    taskInput.value = ""; inputArea.classList.remove("show"); save(); render();
-};
-taskInput.addEventListener("keydown", e => { if (e.key === "Enter") saveBtn.onclick(); if (e.key === "Escape") { inputArea.classList.remove("show"); taskInput.value = ""; } });
+function deleteTask(i) {
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    tasks.splice(i, 1);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    render();
+}
 render();
 </script>
 </body>
