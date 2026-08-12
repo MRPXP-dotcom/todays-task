@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- العناوين والوصف الاحترافي لمحركات البحث -->
-    <title>Daily Mission | مهمة اليوم - تنظيم وإنجاز المهام</title>
+    <!-- العنوان الصافي والمثالي ليظهر كاملاً تحت الأيقونة وفي المتصفح -->
+    <title>Daily Mission</title>
+    
+    <!-- الوصف والكلمات المفتاحية لمحركات البحث (جوجل يقرؤها كاملة بالخلفية) -->
     <meta name="description" content="تطبيق Daily Mission: أداة ذكية لتنظيم مهام العمل، مهام المطبخ، السوق، المدرسة، وإنجاز كافة المهام اليومية بسهولة واحترافية.">
     <meta name="keywords" content="مهمة اليوم, Daily Mission, مهام العمل, مهام المطبخ, مهام السوق, مهام الطبيب, مهمة رائد الفضاء, مهام رجل الاعمال, مهمة المبرمجين, مهام المدرسة, إنجاز المهام">
     <meta name="author" content="Naif Abdullah Al-Ghamdi">
@@ -503,7 +505,11 @@ html.dark .state-btn {
 
     <header class="header">
 
-        <h1 class="title" id="title">مهمة اليوم</h1>
+        <!-- اسم التطبيق مع تلوين Daily باللون الأبيض و Mission باللون الأزرق داخل الواجهة -->
+        <h1 class="title" id="title">
+            <span style="color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.3);">Daily</span> 
+            <span style="color: var(--blue);">Mission</span>
+        </h1>
 
         <div class="header-controls">
 
@@ -603,7 +609,8 @@ let darkMode =
 const text = {
 
     ar: {
-        title: "مهمة اليوم",
+        title: `<span style="color: var(--dark);">Daily</span> <span style="color: var(--blue);">Mission</span>`,
+        titleText: "Daily Mission",
         language: "English",
         add: "أضف مهمة",
         input: "اكتب المهمة...",
@@ -612,7 +619,8 @@ const text = {
     },
 
     en: {
-        title: "Daily Mission",
+        title: `<span style="color: var(--dark);">Daily</span> <span style="color: var(--blue);">Mission</span>`,
+        titleText: "Daily Mission",
         language: "العربية",
         add: "Add task",
         input: "Write your task...",
@@ -690,7 +698,7 @@ function render() {
 
     root.lang = lang;
 
-    title.textContent =
+    title.innerHTML =
         text[lang].title;
 
     langText.textContent =
