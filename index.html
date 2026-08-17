@@ -756,6 +756,10 @@ let darkMode =
     localStorage.getItem("darkMode") === "true";
 
 
+// متغير عام لحفظ مشغل الصوت النشط وإيقافه عند التفاعل
+let currentAudio = null;
+
+
 const text = {
 
     ar: {
@@ -832,28 +836,31 @@ function applyTheme() {
 }
 
 
-// نظام تشغيل الصوت (النغمة الأساسية للمشروع عبر Web Audio API)
+// تشغيل ملف bell.mp3 في وضع التكرار المستمر حتى يتم إيقافه
 function playAlarmSound() {
     try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        [523.25, 659.25, 783.99].forEach((freq, idx) => {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = "triangle";
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.15);
-            gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.15);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.15 + 0.6);
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start(audioCtx.currentTime + idx * 0.15);
-            osc.stop(audioCtx.currentTime + idx * 0.15 + 0.6);
-        });
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+        }
+        currentAudio = new Audio("bell.mp3");
+        currentAudio.loop = true; // تكرار النغمة بشكل مستمر
+        currentAudio.play().catch(e => console.log("Audio play blocked or failed", e));
     } catch (e) {
-        console.log("Audio play failed", e);
+        console.log("Audio initialization failed", e);
     }
 }
 
-// فحص أوقات المهام كل ثانية لتشغيل النغمة الأساسية عند حلول الوقت
+// إيقاف النغمة الحالية
+function stopAlarmSound() {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+    }
+}
+
+// فحص أوقات المهام كل ثانية لتشغيل النغمة التكرارية تلقائياً
 setInterval(() => {
     if (!tasks || tasks.length === 0) return;
     const now = new Date();
@@ -995,7 +1002,7 @@ function render() {
 
         const numberDiv = item.querySelector(".task-number");
         numberDiv.addEventListener("click", () => {
-            // فتح نافذة منبثقة لتحديد الوقت والتاريخ فقط بدون نغمة
+            // فتح نافذة منبثقة لتحديد الوقت والتاريخ فقط
             const overlay = document.createElement("div");
             overlay.className = "modal-overlay";
             overlay.innerHTML = `
@@ -1078,6 +1085,9 @@ function render() {
 
                 const action =
                     button.dataset.action;
+
+                // إيقاف النغمة المستمرة عند التفاعل مع المهمة (حذف أو إنجاز أو إلغاء)
+                stopAlarmSound();
 
 
                 if (action === "delete") {
