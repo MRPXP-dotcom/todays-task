@@ -283,7 +283,10 @@ body {
 .task-date-display {
     font-size: 13px;
     color: var(--muted);
-    font-weight: 500;
+    font-weight: 600;
+    direction: ltr;
+    unicode-bidi: isolate;
+    text-align: right;
 }
 
 .task.done .task-text {
@@ -755,9 +758,10 @@ function render() {
 
         let formattedDate = "";
         if (task.date) {
-            const dateObj = new Date(task.date);
-            if (!isNaN(dateObj)) {
-                formattedDate = dateObj.toLocaleDateString(lang === "ar" ? 'ar-SA' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            const parts = task.date.split("-");
+            if (parts.length === 3) {
+                // تنسيق رقمي احترافي يوم-شهر-سنة (مثال: 1-2-2026)
+                formattedDate = `${parseInt(parts[2])}-${parseInt(parts[1])}-${parts[0]}`;
             } else {
                 formattedDate = task.date;
             }
@@ -825,7 +829,7 @@ function render() {
 
         const numberDiv = item.querySelector(".task-number");
 
-        // النقر المزدوج على رقم المهمة لإضافة أو تعديل التاريخ
+        // النقر المزدوج على رقم المهمة لإضافة أو تعديل التاريخ الرقمي
         numberDiv.addEventListener("dblclick", () => {
             const currentDate = task.date || "";
             const dateInput = document.createElement("input");
@@ -855,7 +859,7 @@ function render() {
             });
         });
 
-        // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
+        // ميزة التعديل المزدوج للنص فقط عندما لا توجد علامة صح أو خطأ
         textDiv.addEventListener("dblclick", () => {
             if (task.status === "done" || task.status === "failed") {
                 return; // مقفل إذا كان منجزاً أو متعثراً
