@@ -278,6 +278,9 @@ body {
     line-height: 1.35;
     overflow-wrap: anywhere;
     user-select: none;
+    direction: rtl;
+    unicode-bidi: isolate;
+    text-align: right;
 }
 
 /* تنسيق عرض التاريخ تحت المهمة بشكل منظم واحترافي */
@@ -741,7 +744,7 @@ function render() {
 
         item.innerHTML = `
 
-            <div class="task-number" title="انقر مرتين لاختيار/تعديل التاريخ">
+            <div class="task-number" title="انقر لاختيار أو تعديل أو إزالة التاريخ">
                 ${index + 1}
             </div>
 
@@ -835,16 +838,15 @@ function render() {
         });
 
 
-        // النقر المزدوج على رقم المهمة لاختيار وتعديل التاريخ (اختياري وبلا نهاية للمدى الزمني ومقفل إذا كانت المهمة منجزة أو متعثرة)
+        // النقر على رقم المهمة يفتح نافذة لاختيار التاريخ أو تعديله أو إزالته
         const numberDiv = item.querySelector(".task-number");
-        numberDiv.addEventListener("dblclick", () => {
+        numberDiv.addEventListener("click", () => {
             if (task.status === "done" || task.status === "failed") {
                 return; // مقفل إذا تم وضع صح أو خطأ
             }
 
-            // نافذة اختيار التاريخ مع مدى سنوات ممتد بلا نهاية واحترافي (من 2000 إلى 2100)
-            const currentParts = task.date ? task.date.split("-") : ["18", "8", "2026"];
-            const curD = currentParts[0] || "18";
+            const currentParts = task.date ? task.date.split("-") : ["17", "8", "2026"];
+            const curD = currentParts[0] || "17";
             const curM = currentParts[1] || "8";
             const curY = currentParts[2] || "2026";
 
@@ -852,22 +854,25 @@ function render() {
             overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:grid;place-items:center;z-index:9999;";
             
             const modal = document.createElement("div");
-            modal.style.cssText = "background:#fff;padding:24px;border-radius:24px;width:300px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;";
+            modal.style.cssText = "background:#fff;padding:24px;border-radius:24px;width:310px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;";
             if(darkMode) {
                 modal.style.background = "#1a2130";
                 modal.style.color = "#edf1f7";
             }
 
             modal.innerHTML = `
-                <h3 style="margin-bottom:16px;font-size:18px;">اختر التاريخ</h3>
+                <h3 style="margin-bottom:16px;font-size:18px;">تحديد / تعديل التاريخ</h3>
                 <div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;direction:ltr;">
                     <select id="selDay" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
                     <select id="selMonth" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
                     <select id="selYear" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
                 </div>
-                <div style="display:flex;gap:10px;justify-content:center;">
-                    <button id="confirmDate" style="padding:8px 20px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;">تأكيد</button>
-                    <button id="cancelDate" style="padding:8px 20px;border:0;border-radius:12px;background:#ccc;color:#333;font-weight:700;cursor:pointer;">إلغاء</button>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div style="display:flex;gap:10px;justify-content:center;">
+                        <button id="confirmDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;">تأكيد وحفظ</button>
+                        <button id="cancelDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:#ccc;color:#333;font-weight:700;cursor:pointer;">إلغاء</button>
+                    </div>
+                    ${task.date ? `<button id="removeDate" style="width:100%;padding:8px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:700;cursor:pointer;">إزالة التاريخ من المهمة</button>` : ''}
                 </div>
             `;
 
@@ -909,6 +914,16 @@ function render() {
                 document.body.removeChild(overlay);
                 render();
             };
+
+            const removeBtn = modal.querySelector("#removeDate");
+            if(removeBtn) {
+                removeBtn.onclick = () => {
+                    tasks[index].date = "";
+                    save();
+                    document.body.removeChild(overlay);
+                    render();
+                };
+            }
 
             modal.querySelector("#cancelDate").onclick = () => {
                 document.body.removeChild(overlay);
