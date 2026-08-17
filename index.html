@@ -169,12 +169,44 @@ body {
 
 .input-area {
     display: none;
-    gap: 10px;
+    flex-direction: column;
+    gap: 12px;
     margin-top: 14px;
 }
 
 .input-area.show {
     display: flex;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.datetime-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.datetime-row input,
+.datetime-row select {
+    flex: 1;
+    min-width: 130px;
+    height: 46px;
+    padding: 0 12px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    color: var(--dark);
+    background: #fff;
+    font-size: 15px;
+    transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+
+.datetime-row input:focus,
+.datetime-row select:focus {
+    border-color: var(--blue);
 }
 
 .task-input {
@@ -259,6 +291,21 @@ body {
     direction: ltr;
     unicode-bidi: isolate;
     text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: background .2s ease, color .2s ease;
+}
+
+.task-number:hover {
+    background: var(--blue);
+    color: white;
+}
+
+.task-content-wrapper {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .task-text {
@@ -269,6 +316,18 @@ body {
     line-height: 1.35;
     overflow-wrap: anywhere;
     user-select: none;
+}
+
+.task-datetime {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+    direction: ltr;
+    text-align: right;
+}
+
+html[dir="ltr"] .task-datetime {
+    text-align: left;
 }
 
 .task.done .task-text {
@@ -341,13 +400,72 @@ html[dir="ltr"] .task-number {
     grid-column: 3;
 }
 
-html[dir="ltr"] .task-text {
+html[dir="ltr"] .task-content-wrapper {
     grid-column: 2;
 }
 
 html[dir="ltr"] .actions {
     grid-column: 1;
     grid-row: 1;
+}
+
+
+/* نافذة منبثقة لتحديد الوقت والتاريخ عند الضغط على رقم المهمة */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: grid;
+    place-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 24px;
+    border-radius: 24px;
+    width: min(100%, 400px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    color: var(--blue);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: 14px;
+    border: 0;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.modal-btn.save {
+    background: var(--green);
+    color: white;
+}
+
+.modal-btn.cancel {
+    background: #e5e1d8;
+    color: var(--dark);
 }
 
 
@@ -383,19 +501,34 @@ html.dark .theme-btn {
     color: #edf1f7;
 }
 
-html.dark .task-input {
+html.dark .task-input,
+html.dark .datetime-row input,
+html.dark .datetime-row select,
+html.dark .modal-content {
     background: #202938;
     border-color: #3a4355;
     color: #edf1f7;
 }
 
-html.dark .task-input:focus {
+html.dark .modal-content {
+    background: #1a2130;
+    border: 1px solid #3a4355;
+}
+
+html.dark .task-input:focus,
+html.dark .datetime-row input:focus,
+html.dark .datetime-row select:focus {
     border-color: var(--blue);
 }
 
 html.dark .task-number {
     background: rgba(255,255,255,.12);
     color: #edf1f7;
+}
+
+html.dark .task-number:hover {
+    background: var(--blue);
+    color: #fff;
 }
 
 html.dark .task.done .task-number {
@@ -415,6 +548,11 @@ html.dark .task.failed .task-text {
 html.dark .state-btn {
     border-color: #3a4355;
     color: #9da9c0;
+}
+
+html.dark .modal-btn.cancel {
+    background: #3a4355;
+    color: #edf1f7;
 }
 
 
@@ -505,6 +643,10 @@ html.dark .state-btn {
         flex-direction: column;
     }
 
+    .input-row {
+        flex-direction: column;
+    }
+
     .task-input,
     .save-btn {
         width: 100%;
@@ -552,17 +694,29 @@ html.dark .state-btn {
 
         <div class="input-area" id="inputArea">
 
-            <input
-                id="taskInput"
-                class="task-input"
-                type="text"
-                autocomplete="off"
-                placeholder="اكتب المهمة..."
-            >
+            <div class="input-row">
+                <input
+                    id="taskInput"
+                    class="task-input"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="اكتب المهمة..."
+                >
 
-            <button class="save-btn" id="saveBtn">
-                إضافة
-            </button>
+                <button class="save-btn" id="saveBtn">
+                    إضافة
+                </button>
+            </div>
+
+            <div class="datetime-row">
+                <input type="date" id="taskDate" aria-label="تاريخ المهمة (اختياري)">
+                <input type="time" id="taskTime" aria-label="وقت المهمة (اختياري)">
+                <select id="taskAlarm" aria-label="النغمة">
+                    <option value="bell">نغمة الجرس</option>
+                    <option value="chime">نغمة رنين لطيفة</option>
+                    <option value="beep">تنبيه حاد</option>
+                </select>
+            </div>
 
         </div>
 
@@ -586,6 +740,9 @@ const addBtn = document.getElementById("addBtn");
 const addText = document.getElementById("addText");
 const inputArea = document.getElementById("inputArea");
 const taskInput = document.getElementById("taskInput");
+const taskDate = document.getElementById("taskDate");
+const taskTime = document.getElementById("taskTime");
+const taskAlarm = document.getElementById("taskAlarm");
 const saveBtn = document.getElementById("saveBtn");
 const taskList = document.getElementById("taskList");
 const empty = document.getElementById("empty");
@@ -625,7 +782,13 @@ const text = {
         add: "أضف مهمة",
         input: "اكتب المهمة...",
         save: "إضافة",
-        empty: "أضف أول مهمة لك"
+        empty: "أضف أول مهمة لك",
+        bell: "نغمة الجرس",
+        chime: "نغمة رنين لطيفة",
+        beep: "تنبيه حاد",
+        modalTitle: "تحديد الوقت والتاريخ والنغمة",
+        modalSave: "حفظ",
+        modalCancel: "إلغاء"
     },
 
     en: {
@@ -635,7 +798,13 @@ const text = {
         add: "Add task",
         input: "Write your task...",
         save: "Add",
-        empty: "Add your first task"
+        empty: "Add your first task",
+        bell: "Bell Tone",
+        chime: "Gentle Chime",
+        beep: "Sharp Beep",
+        modalTitle: "Set Date, Time & Alarm",
+        modalSave: "Save",
+        modalCancel: "Cancel"
     }
 
 };
@@ -686,6 +855,79 @@ function applyTheme() {
 }
 
 
+// نظام تشغيل الصوت (النغمات المتنوعة عبر Web Audio API)
+function playAlarmSound(type) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        if (type === "bell") {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.5);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 1.5);
+        } else if (type === "chime") {
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "triangle";
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.15);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.15);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.15 + 0.6);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + idx * 0.15);
+                osc.stop(audioCtx.currentTime + idx * 0.15 + 0.6);
+            });
+        } else if (type === "beep") {
+            for (let i = 0; i < 3; i++) {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "square";
+                osc.frequency.setValueAtTime(1200, audioCtx.currentTime + i * 0.2);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime + i * 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + i * 0.2 + 0.1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(audioCtx.currentTime + i * 0.2);
+                osc.stop(audioCtx.currentTime + i * 0.2 + 0.1);
+            }
+        }
+    } catch (e) {
+        console.log("Audio play failed", e);
+    }
+}
+
+// فحص أوقات المهام كل ثانية لتشغيل النغمة المطلوبة عند حلول الوقت
+setInterval(() => {
+    if (!tasks || tasks.length === 0) return;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const currentDateStr = `${year}-${month}-${day}`;
+    const currentTimeStr = `${hours}:${minutes}`;
+
+    tasks.forEach((task) => {
+        if (!task.notified && task.date && task.time && task.status !== "done" && task.status !== "failed") {
+            if (task.date === currentDateStr && task.time === currentTimeStr) {
+                playAlarmSound(task.alarm || "bell");
+                task.notified = true;
+                save();
+            }
+        }
+    });
+}, 1000);
+
+
 function render() {
 
     root.dir =
@@ -713,6 +955,13 @@ function render() {
     empty.textContent =
         text[lang].empty;
 
+    // تحديث خيارات النغمات بناءً على اللغة
+    if (taskAlarm) {
+        taskAlarm.options[0].text = text[lang].bell;
+        taskAlarm.options[1].text = text[lang].chime;
+        taskAlarm.options[2].text = text[lang].beep;
+    }
+
 
     taskList.innerHTML = "";
 
@@ -739,13 +988,22 @@ function render() {
             );
 
 
+        let dateTimeDisplay = "";
+        if (task.date || task.time) {
+            dateTimeDisplay = `<div class="task-datetime">${task.date || ""} ${task.time || ""}</div>`;
+        }
+
+
         item.innerHTML = `
 
-            <div class="task-number">
+            <div class="task-number" title="اضغط لتحديد الوقت والتاريخ">
                 ${index + 1}
             </div>
 
-            <div class="task-text"></div>
+            <div class="task-content-wrapper">
+                <div class="task-text"></div>
+                ${dateTimeDisplay}
+            </div>
 
             <div class="actions">
 
@@ -792,13 +1050,57 @@ function render() {
         `;
 
 
+        const numberDiv = item.querySelector(".task-number");
+        numberDiv.addEventListener("click", () => {
+            // فتح نافذة منبثقة لتحديد الوقت والتاريخ
+            const overlay = document.createElement("div");
+            overlay.className = "modal-overlay";
+            overlay.innerHTML = `
+                <div class="modal-content">
+                    <h3>${text[lang].modalTitle}</h3>
+                    <div class="datetime-row" style="flex-direction: column;">
+                        <input type="date" id="modalDate" value="${task.date || ""}">
+                        <input type="time" id="modalTime" value="${task.time || ""}">
+                        <select id="modalAlarm">
+                            <option value="bell" ${task.alarm === 'bell' ? 'selected' : ''}>${text[lang].bell}</option>
+                            <option value="chime" ${task.alarm === 'chime' ? 'selected' : ''}>${text[lang].chime}</option>
+                            <option value="beep" ${task.alarm === 'beep' ? 'selected' : ''}>${text[lang].beep}</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-btn cancel" id="modalCancel">${text[lang].modalCancel}</button>
+                        <button class="modal-btn save" id="modalSave">${text[lang].modalSave}</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+
+            const modalDate = overlay.querySelector("#modalDate");
+            const modalTime = overlay.querySelector("#modalTime");
+            const modalAlarm = overlay.querySelector("#modalAlarm");
+
+            overlay.querySelector("#modalCancel").onclick = () => overlay.remove();
+            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+            overlay.querySelector("#modalSave").onclick = () => {
+                tasks[index].date = modalDate.value || "";
+                tasks[index].time = modalTime.value || "";
+                tasks[index].alarm = modalAlarm.value || "bell";
+                tasks[index].notified = false; // إعادة ضبط التنبيه في حال تغير الوقت
+                save();
+                render();
+                overlay.remove();
+            };
+        });
+
+
         const textDiv = item.querySelector(".task-text");
         textDiv.textContent = task.text;
 
         // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
         textDiv.addEventListener("dblclick", () => {
             if (task.status === "done" || task.status === "failed") {
-                return; // مقفل إذا كان منجزاً أو متعثراً
+                return;
             }
 
             const currentText = task.text;
@@ -923,12 +1225,19 @@ saveBtn.onclick = () => {
         text:
             taskInput.value.trim(),
 
-        status: ""
+        status: "",
+        date: taskDate.value || "",
+        time: taskTime.value || "",
+        alarm: taskAlarm.value || "bell",
+        notified: false
 
     });
 
 
     taskInput.value = "";
+    taskDate.value = "";
+    taskTime.value = "";
+    taskAlarm.value = "bell";
 
     inputArea.classList.remove(
         "show"
@@ -959,6 +1268,8 @@ taskInput.addEventListener(
             );
 
             taskInput.value = "";
+            taskDate.value = "";
+            taskTime.value = "";
 
         }
 
