@@ -8,12 +8,15 @@
     <meta http-equiv="Cache-Control" content="max-age=31536000, public">
     <meta http-equiv="Expires" content="Wed, 31 Dec 2026 23:59:59 GMT">
     
+    <!-- العنوان الصافي والمثالي ليظهر كاملاً تحت الأيقونة وفي المتصفح -->
     <title>Daily Mission</title>
     
+    <!-- الوصف والكلمات المفتاحية لمحركات البحث -->
     <meta name="description" content="تطبيق Daily Mission: أداة ذكية لتنظيم مهام العمل، مهام المطبخ، السوق، المدرسة، وإنجاز كافة المهام اليومية بسهولة واحترافية.">
     <meta name="keywords" content="مهمة اليوم, Daily Mission, مهام العمل, مهام المطبخ, مهام السوق, مهام الطبيب, مهمة رائد الفضاء, مهام رجل الاعمال, مهمة المبرمجين, مهام المدرسة, إنجاز المهام">
     <meta name="author" content="Naif Abdullah Al-Ghamdi">
 
+    <!-- الأيقونات لضمان ظهور الشعار على كافة الأجهزة -->
     <link rel="icon" type="image/png" sizes="32x32" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
     <link rel="icon" type="image/png" sizes="16x16" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
     <link rel="apple-touch-icon" sizes="180x180" href="9368C532-D833-4080-AB32-CC3CEBB9E3B8.png">
@@ -25,6 +28,7 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
+
       gtag('config', 'G-TQYL8HF18J');
     </script>
 
@@ -54,7 +58,14 @@ body {
     padding: clamp(14px, 3vw, 32px);
     background: var(--cream);
     color: var(--dark);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
     transition: background .25s ease, color .25s ease;
 }
 
@@ -66,6 +77,7 @@ body {
     background: #fff;
     border: 2px solid #e6e2d9;
     border-radius: clamp(28px, 5vw, 48px);
+
     transition: background .25s ease, border-color .25s ease;
 }
 
@@ -80,7 +92,7 @@ body {
 
 .title {
     color: var(--blue);
-    font-size: clamp(26px, 4.5vw, 42px);
+    font-size: clamp(28px, 5vw, 46px);
     font-weight: 800;
     line-height: 1.1;
 }
@@ -95,18 +107,19 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    height: 48px;
-    padding: 0 18px;
+    min-height: 48px;
+    padding: 0 20px;
     border: 2px solid #e5e1d8;
     border-radius: 30px;
     background: #fafafa;
     color: var(--dark);
-    font-size: 15px;
+    font-size: clamp(15px, 2.5vw, 20px);
     font-weight: 600;
     cursor: pointer;
     white-space: nowrap;
 }
 
+/* زر الوضع الليلي */
 .theme-btn {
     width: 48px;
     height: 48px;
@@ -117,11 +130,14 @@ body {
     background: #fafafa;
     color: var(--dark);
     cursor: pointer;
+    transition: background .25s ease,
+                color .25s ease,
+                border-color .25s ease;
 }
 
 .theme-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
     fill: currentColor;
 }
 
@@ -134,20 +150,19 @@ body {
     align-items: center;
     justify-content: center;
     gap: 12px;
-    width: 100%;
-    min-height: 64px;
-    padding: 0 28px;
+    min-height: 72px;
+    padding: 0 32px;
     border: 0;
-    border-radius: 22px;
+    border-radius: 25px;
     background: var(--blue);
     color: #fff;
-    font-size: 20px;
+    font-size: clamp(19px, 3vw, 26px);
     font-weight: 700;
     cursor: pointer;
 }
 
 .plus {
-    font-size: 28px;
+    font-size: 34px;
     font-weight: 300;
     line-height: 1;
 }
@@ -165,14 +180,18 @@ body {
 .task-input {
     flex: 1;
     min-width: 0;
-    height: 54px;
+    height: 58px;
     padding: 0 18px;
     border: 2px solid var(--border);
-    border-radius: 16px;
+    border-radius: 18px;
     outline: none;
     color: var(--dark);
     background: #fff;
-    font-size: 16px;
+    font-size: 17px;
+
+    transition: background .25s ease,
+                color .25s ease,
+                border-color .25s ease;
 }
 
 .task-input:focus {
@@ -181,12 +200,11 @@ body {
 
 .save-btn {
     min-width: 90px;
-    height: 54px;
     border: 0;
-    border-radius: 16px;
+    border-radius: 18px;
     background: var(--green);
     color: white;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -195,24 +213,24 @@ body {
     padding: 70px 20px;
     text-align: center;
     color: var(--muted);
-    font-size: 20px;
+    font-size: clamp(19px, 3vw, 27px);
 }
 
 .tasks {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 18px;
 }
 
 .task {
     display: grid;
-    grid-template-columns: 52px 1fr auto;
+    grid-template-columns: 58px 1fr auto;
     align-items: center;
-    gap: 16px;
-    min-height: 110px;
-    padding: 16px 18px;
+    gap: clamp(12px, 2vw, 22px);
+    min-height: 128px;
+    padding: 18px 20px;
     border: 2px solid;
-    border-radius: 24px;
+    border-radius: 28px;
     transition: .2s ease;
 }
 
@@ -226,45 +244,42 @@ body {
     border-color: var(--red-border);
 }
 
+/* الترقيم */
 .task-number {
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
     display: grid;
     place-items: center;
-    border-radius: 16px;
-    background: rgba(255,255,255,.7);
+    border-radius: 18px;
+    background: rgba(255,255,255,.65);
     color: var(--muted);
-    font-size: 18px;
+    font-size: 23px;
     font-weight: 700;
-    cursor: pointer;
-    user-select: none;
-    direction: ltr;
-}
 
-.task-content-box {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    min-width: 0;
+    direction: ltr;
+    unicode-bidi: isolate;
+    text-align: center;
 }
 
 .task-text {
     min-width: 0;
     color: var(--dark);
-    font-size: 18px;
+    font-size: clamp(18px, 3vw, 27px);
     font-weight: 600;
-    line-height: 1.4;
+    line-height: 1.35;
     overflow-wrap: anywhere;
     user-select: none;
 }
 
-.task-date-display {
-    font-size: 13px;
+/* تنسيق عرض التاريخ تحت المهمة بشكل منظم واحترافي */
+.task-date {
+    display: block;
+    font-size: 14px;
     color: var(--muted);
-    font-weight: 600;
+    margin-top: 4px;
     direction: ltr;
+    unicode-bidi: isolate;
     text-align: right;
-    width: fit-content;
 }
 
 .task.done .task-text {
@@ -276,20 +291,20 @@ body {
 .actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
 .state-btn {
-    width: 60px;
-    height: 60px;
-    flex: 0 0 60px;
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
     display: grid;
     place-items: center;
     border: 2px solid #e5e1d8;
-    border-radius: 18px;
+    border-radius: 22px;
     background: transparent;
     color: #68728c;
-    font-size: 32px;
+    font-size: 39px;
     font-weight: 300;
     line-height: 1;
     cursor: pointer;
@@ -308,9 +323,9 @@ body {
 }
 
 .delete {
-    width: 48px;
-    height: 48px;
-    flex: 0 0 48px;
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
     display: grid;
     place-items: center;
     border: 0;
@@ -320,118 +335,36 @@ body {
 }
 
 .delete svg {
-    width: 26px;
-    height: 26px;
+    width: 34px;
+    height: 34px;
     stroke: currentColor;
     fill: none;
-    stroke-width: 2.2;
+    stroke-width: 2.3;
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
-/* Modal عجلة التاريخ */
-.wheel-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    display: grid;
-    place-items: center;
-    z-index: 1000;
-    padding: 20px;
+html[dir="ltr"] .task {
+    grid-template-columns: auto 1fr 58px;
 }
 
-.wheel-card {
-    background: #fff;
-    padding: 24px;
-    border-radius: 24px;
-    width: min(100%, 340px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    border: 2px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+html[dir="ltr"] .task-number {
+    grid-column: 3;
 }
 
-.wheel-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    height: 160px;
-    position: relative;
-    background: #fafafa;
-    border-radius: 16px;
-    border: 2px solid var(--border);
-    overflow: hidden;
+html[dir="ltr"] .task-text {
+    grid-column: 2;
 }
 
-.wheel-container::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    right: 10px;
-    height: 40px;
-    transform: translateY(-50%);
-    border-top: 2px solid var(--blue);
-    border-bottom: 2px solid var(--blue);
-    pointer-events: none;
-    background: rgba(57, 73, 171, 0.05);
-    border-radius: 6px;
+html[dir="ltr"] .actions {
+    grid-column: 1;
+    grid-row: 1;
 }
 
-.wheel-column {
-    flex: 1;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    text-align: center;
-    padding: 60px 0;
-    scroll-snap-type: y mandatory;
-}
 
-.wheel-column::-webkit-scrollbar {
-    display: none;
-}
-
-.wheel-item {
-    height: 40px;
-    display: grid;
-    place-items: center;
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--muted);
-    cursor: pointer;
-    scroll-snap-align: center;
-}
-
-.wheel-item.selected {
-    color: var(--blue);
-    font-size: 18px;
-}
-
-.wheel-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.wheel-btn {
-    flex: 1;
-    height: 48px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    border: 0;
-}
-
-.wheel-btn.save {
-    background: var(--blue);
-    color: #fff;
-}
-
-.wheel-btn.cancel {
-    background: #eee;
-    color: var(--dark);
-}
+/* =========================================================
+   الوضع الليلي
+   ========================================================= */
 
 html.dark {
     --dark: #edf1f7;
@@ -467,14 +400,22 @@ html.dark .task-input {
     color: #edf1f7;
 }
 
+html.dark .task-input:focus {
+    border-color: var(--blue);
+}
+
 html.dark .task-number {
     background: rgba(255,255,255,.12);
     color: #edf1f7;
 }
 
-html.dark .task.done .task-number,
+html.dark .task.done .task-number {
+    background: rgba(255,255,255,.65);
+    color: #202b43;
+}
+
 html.dark .task.failed .task-number {
-    background: rgba(255,255,255,.7);
+    background: rgba(255,255,255,.65);
     color: #202b43;
 }
 
@@ -487,29 +428,99 @@ html.dark .state-btn {
     color: #9da9c0;
 }
 
-html.dark .wheel-card {
-    background: #1a2130;
-    border-color: #3a4355;
-}
 
-html.dark .wheel-container {
-    background: #222b3c;
-    border-color: #3a4355;
-}
-
-html.dark .wheel-btn.cancel {
-    background: #2d3748;
-    color: #edf1f7;
-}
+/* =========================================================
+   الهاتف
+   ========================================================= */
 
 @media (max-width: 600px) {
-    body { padding: 10px; }
-    .app { min-height: calc(100vh - 20px); padding: 20px 14px; border-radius: 24px; }
-    .task { min-height: 100px; padding: 14px; border-radius: 20px; }
-    .task-number { width: 44px; height: 44px; border-radius: 14px; font-size: 16px; }
-    .state-btn { width: 50px; height: 50px; flex-basis: 50px; border-radius: 14px; font-size: 26px; }
-    .delete { width: 40px; height: 40px; flex-basis: 40px; }
-    .delete svg { width: 22px; height: 22px; }
+
+    body {
+        padding: 10px;
+    }
+
+    .app {
+        min-height: calc(100vh - 20px);
+        padding: 22px 16px;
+        border-radius: 28px;
+    }
+
+    .header {
+        gap: 10px;
+    }
+
+    .header-controls {
+        gap: 5px;
+    }
+
+    .lang {
+        min-height: 42px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+
+    .theme-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .add-btn {
+        width: 100%;
+        min-height: 62px;
+        border-radius: 21px;
+    }
+
+    .task {
+        grid-template-columns: 44px 1fr auto;
+        gap: 9px;
+        min-height: 104px;
+        padding: 13px;
+        border-radius: 22px;
+    }
+
+    .task-number {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        font-size: 18px;
+    }
+
+    .actions {
+        gap: 5px;
+    }
+
+    .state-btn {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+        border-radius: 16px;
+        font-size: 30px;
+    }
+
+    .delete {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+    }
+
+    .delete svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    html[dir="ltr"] .task {
+        grid-template-columns: auto 1fr 44px;
+    }
+
+    .input-area {
+        flex-direction: column;
+    }
+
+    .task-input,
+    .save-btn {
+        width: 100%;
+        min-height: 54px;
+    }
 }
 </style>
 </head>
@@ -517,36 +528,67 @@ html.dark .wheel-btn.cancel {
 <body>
 
 <main class="app">
+
     <header class="header">
+
         <h1 class="title" id="title">
             <span style="color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.3);">Daily</span> 
             <span style="color: var(--blue);">Mission</span>
         </h1>
+
         <div class="header-controls">
+
             <button class="lang" id="langBtn">
                 <span id="langText">English</span>
                 <span>文A</span>
             </button>
-            <button class="theme-btn" id="themeBtn" aria-label="الوضع الليلي"></button>
+
+            <button
+                class="theme-btn"
+                id="themeBtn"
+                aria-label="الوضع الليلي"
+            >
+            </button>
+
         </div>
+
     </header>
 
     <section class="add-area">
+
         <button class="add-btn" id="addBtn">
             <span class="plus">＋</span>
             <span id="addText">أضف مهمة</span>
         </button>
+
         <div class="input-area" id="inputArea">
-            <input id="taskInput" class="task-input" type="text" autocomplete="off" placeholder="اكتب المهمة...">
-            <button class="save-btn" id="saveBtn">إضافة</button>
+
+            <input
+                id="taskInput"
+                class="task-input"
+                type="text"
+                autocomplete="off"
+                placeholder="اكتب المهمة..."
+            >
+
+            <button class="save-btn" id="saveBtn">
+                إضافة
+            </button>
+
         </div>
+
     </section>
 
     <section id="taskList" class="tasks"></section>
-    <div id="empty" class="empty">أضف أول مهمة لك</div>
+
+    <div id="empty" class="empty">
+        أضف أول مهمة لك
+    </div>
+
 </main>
 
 <script>
+
 const root = document.getElementById("root");
 const title = document.getElementById("title");
 const langBtn = document.getElementById("langBtn");
@@ -560,187 +602,218 @@ const taskList = document.getElementById("taskList");
 const empty = document.getElementById("empty");
 const themeBtn = document.getElementById("themeBtn");
 
+
 let lang = localStorage.getItem("language") || "ar";
-let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-if (!Array.isArray(tasks)) tasks = [];
-let darkMode = localStorage.getItem("darkMode") === "true";
+
+let tasks;
+
+try {
+
+    tasks = JSON.parse(
+        localStorage.getItem("tasks") || "[]"
+    );
+
+    if (!Array.isArray(tasks)) {
+        tasks = [];
+    }
+
+} catch {
+
+    tasks = [];
+
+}
+
+let darkMode =
+    localStorage.getItem("darkMode") === "true";
+
 
 const text = {
+
     ar: {
         title: `<span style="color: var(--dark);">Daily</span> <span style="color: var(--blue);">Mission</span>`,
+        titleText: "Daily Mission",
         language: "English",
         add: "أضف مهمة",
         input: "اكتب المهمة...",
         save: "إضافة",
-        empty: "أضف أول مهمة لك",
-        cancel: "إلغاء",
-        confirm: "تأكيد"
+        empty: "أضف أول مهمة لك"
     },
+
     en: {
         title: `<span style="color: var(--dark);">Daily</span> <span style="color: var(--blue);">Mission</span>`,
+        titleText: "Daily Mission",
         language: "العربية",
         add: "Add task",
         input: "Write your task...",
         save: "Add",
-        empty: "Add your first task",
-        cancel: "Cancel",
-        confirm: "Confirm"
+        empty: "Add your first task"
     }
+
 };
 
+
 function save() {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    localStorage.setItem("language", lang);
-    localStorage.setItem("darkMode", darkMode);
+
+    localStorage.setItem(
+        "tasks",
+        JSON.stringify(tasks)
+    );
+
+    localStorage.setItem(
+        "language",
+        lang
+    );
+
+    localStorage.setItem(
+        "darkMode",
+        darkMode
+    );
+
 }
+
 
 function applyTheme() {
-    root.classList.toggle("dark", darkMode);
-    themeBtn.innerHTML = darkMode ? `
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2m-4.22-7.78l-1.42 1.42M6.34 17.66l-1.42 1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    ` : `
-        <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/></svg>
-    `;
+
+    root.classList.toggle(
+        "dark",
+        darkMode
+    );
+
+    if (darkMode) {
+        themeBtn.innerHTML = `
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5" fill="currentColor"/>
+                <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2m-4.22-7.78l-1.42 1.42M6.34 17.66l-1.42 1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        `;
+    } else {
+        themeBtn.innerHTML = `
+            <svg viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/>
+            </svg>
+        `;
+    }
+
 }
 
-function openWheelPicker(taskIndex) {
-    const currentTask = tasks[taskIndex];
-    let [y, m, d] = currentTask.date ? currentTask.date.split("-").map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1, new Date().getDate()];
-    if (!y) y = new Date().getFullYear();
-    if (!m) m = new Date().getMonth() + 1;
-    if (!d) d = new Date().getDate();
-
-    const modal = document.createElement("div");
-    modal.className = "wheel-modal";
-
-    modal.innerHTML = `
-        <div class="wheel-card">
-            <div class="wheel-container">
-                <div class="wheel-column" id="dayWheel"></div>
-                <div class="wheel-column" id="monthWheel"></div>
-                <div class="wheel-column" id="yearWheel"></div>
-            </div>
-            <div class="wheel-actions">
-                <button class="wheel-btn cancel" id="wheelCancel">${text[lang].cancel}</button>
-                <button class="wheel-btn save" id="wheelSave">${text[lang].confirm}</button>
-            </div>
-        </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    const dayWheel = modal.querySelector("#dayWheel");
-    const monthWheel = modal.querySelector("#monthWheel");
-    const yearWheel = modal.querySelector("#yearWheel");
-
-    for (let i = 1; i <= 31; i++) {
-        const div = document.createElement("div");
-        div.className = "wheel-item " + (i === d ? "selected" : "");
-        div.textContent = i;
-        div.onclick = () => { d = i; updateWheelSelection(); };
-        dayWheel.appendChild(div);
-    }
-
-    for (let i = 1; i <= 12; i++) {
-        const div = document.createElement("div");
-        div.className = "wheel-item " + (i === m ? "selected" : "");
-        div.textContent = i;
-        div.onclick = () => { m = i; updateWheelSelection(); };
-        monthWheel.appendChild(div);
-    }
-
-    const currentYear = new Date().getFullYear();
-    for (let i = currentYear - 2; i <= currentYear + 5; i++) {
-        const div = document.createElement("div");
-        div.className = "wheel-item " + (i === y ? "selected" : "");
-        div.textContent = i;
-        div.onclick = () => { y = i; updateWheelSelection(); };
-        yearWheel.appendChild(div);
-    }
-
-    function updateWheelSelection() {
-        [...dayWheel.children].forEach(c => c.classList.toggle("selected", parseInt(c.textContent) === d));
-        [...monthWheel.children].forEach(c => c.classList.toggle("selected", parseInt(c.textContent) === m));
-        [...yearWheel.children].forEach(c => c.classList.toggle("selected", parseInt(c.textContent) === y));
-    }
-
-    setTimeout(() => {
-        dayWheel.scrollTop = (d - 1) * 40;
-        monthWheel.scrollTop = (m - 1) * 40;
-        yearWheel.scrollTop = ((y - (currentYear - 2))) * 40;
-    }, 50);
-
-    modal.querySelector("#wheelCancel").onclick = () => modal.remove();
-    modal.querySelector("#wheelSave").onclick = () => {
-        tasks[taskIndex].date = `${d}-${m}-${y}`;
-        save();
-        render();
-        modal.remove();
-    };
-}
 
 function render() {
-    root.dir = lang === "ar" ? "rtl" : "ltr";
+
+    root.dir =
+        lang === "ar"
+            ? "rtl"
+            : "ltr";
+
     root.lang = lang;
-    title.innerHTML = text[lang].title;
-    langText.textContent = text[lang].language;
-    addText.textContent = text[lang].add;
-    taskInput.placeholder = text[lang].input;
-    saveBtn.textContent = text[lang].save;
-    empty.textContent = text[lang].empty;
+
+    title.innerHTML =
+        text[lang].title;
+
+    langText.textContent =
+        text[lang].language;
+
+    addText.textContent =
+        text[lang].add;
+
+    taskInput.placeholder =
+        text[lang].input;
+
+    saveBtn.textContent =
+        text[lang].save;
+
+    empty.textContent =
+        text[lang].empty;
+
 
     taskList.innerHTML = "";
-    empty.style.display = tasks.length ? "none" : "block";
+
+    empty.style.display =
+        tasks.length
+            ? "none"
+            : "block";
+
 
     tasks.forEach((task, index) => {
-        const item = document.createElement("article");
-        item.className = "task " + (task.status === "done" ? "done" : task.status === "failed" ? "failed" : "");
 
-        let formattedDate = "";
-        if (task.date) {
-            const parts = task.date.split("-");
-            if (parts.length === 3) {
-                formattedDate = `${parseInt(parts[0])}-${parseInt(parts[1])}-${parts[2]}`;
-            }
-        }
+        const item =
+            document.createElement("article");
+
+
+        item.className =
+            "task " +
+            (
+                task.status === "done"
+                    ? "done"
+                    : task.status === "failed"
+                        ? "failed"
+                        : ""
+            );
+
 
         item.innerHTML = `
-            <div class="task-number" title="انقر لاختيار التاريخ">
+
+            <div class="task-number">
                 ${index + 1}
             </div>
-            <div class="task-content-box">
+
+            <div class="task-content-wrapper" style="min-width:0; flex:1;">
                 <div class="task-text"></div>
-                <div class="task-date-display">${formattedDate}</div>
+                ${task.date ? `<span class="task-date">${task.date}</span>` : ''}
             </div>
+
             <div class="actions">
-                <button class="state-btn cross ${task.status === "failed" ? "active" : ""}" data-action="failed">×</button>
-                <button class="state-btn check ${task.status === "done" ? "active" : ""}" data-action="done">✓</button>
-                <button class="delete" data-action="delete">
+
+                <button
+                    class="state-btn cross ${
+                        task.status === "failed"
+                            ? "active"
+                            : ""
+                    }"
+                    data-action="failed"
+                >
+                    ×
+                </button>
+
+                <button
+                    class="state-btn check ${
+                        task.status === "done"
+                            ? "active"
+                            : ""
+                    }"
+                    data-action="done"
+                >
+                    ✓
+                </button>
+
+                <button
+                    class="delete"
+                    data-action="delete"
+                >
+
                     <svg viewBox="0 0 24 24">
+
                         <path d="M4 7h16"/>
                         <path d="M9 7V4h6v3"/>
                         <path d="M6 7l1 13h10l1-13"/>
                         <path d="M10 11v5"/>
                         <path d="M14 11v5"/>
+
                     </svg>
+
                 </button>
+
             </div>
         `;
+
 
         const textDiv = item.querySelector(".task-text");
         textDiv.textContent = task.text;
 
-        const numberDiv = item.querySelector(".task-number");
-        
-        numberDiv.addEventListener("click", () => {
-            if (task.status === "done" || task.status === "failed") {
-                return; 
-            }
-            openWheelPicker(index);
-        });
-
+        // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
         textDiv.addEventListener("dblclick", () => {
-            if (task.status === "done" || task.status === "failed") return;
+            if (task.status === "done" || task.status === "failed") {
+                return; // مقفل إذا كان منجزاً أو متعثراً
+            }
 
             const currentText = task.text;
             const inputField = document.createElement("input");
@@ -748,7 +821,7 @@ function render() {
             inputField.value = currentText;
             inputField.className = "task-input";
             inputField.style.height = "42px";
-            inputField.style.fontSize = "16px";
+            inputField.style.fontSize = "inherit";
 
             textDiv.replaceWith(inputField);
             inputField.focus();
@@ -764,72 +837,164 @@ function render() {
 
             inputField.addEventListener("blur", saveEdit);
             inputField.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") saveEdit();
-                if (e.key === "Escape") render();
+                if (e.key === "Enter") {
+                    saveEdit();
+                } else if (e.key === "Escape") {
+                    render();
+                }
             });
         });
 
-        item.querySelectorAll("[data-action]").forEach(button => {
+
+        item.querySelectorAll(
+            "[data-action]"
+        ).forEach(button => {
+
             button.onclick = () => {
-                const action = button.dataset.action;
+
+                const action =
+                    button.dataset.action;
+
+
                 if (action === "delete") {
-                    tasks.splice(index, 1);
+
+                    tasks.splice(
+                        index,
+                        1
+                    );
+
                 } else {
-                    tasks[index].status = tasks[index].status === action ? "" : action;
+
+                    tasks[index].status =
+                        tasks[index].status === action
+                            ? ""
+                            : action;
+
                 }
+
+
                 save();
+
                 render();
+
             };
+
         });
 
+
         taskList.appendChild(item);
+
     });
 
+
     applyTheme();
+
 }
 
+
 langBtn.onclick = () => {
-    lang = lang === "ar" ? "en" : "ar";
+
+    lang =
+        lang === "ar"
+            ? "en"
+            : "ar";
+
     save();
+
     render();
+
 };
+
 
 addBtn.onclick = () => {
+
     inputArea.classList.toggle("show");
-    if (inputArea.classList.contains("show")) taskInput.focus();
+
+    if (
+        inputArea.classList.contains("show")
+    ) {
+
+        taskInput.focus();
+
+    }
+
 };
+
 
 saveBtn.onclick = () => {
+
     if (!taskInput.value.trim()) {
+
         taskInput.focus();
+
         return;
+
     }
+
+
     tasks.push({
-        text: taskInput.value.trim(),
-        date: "",
-        status: ""
+
+        text:
+            taskInput.value.trim(),
+
+        status: "",
+        date: "18-8-2026"
+
     });
+
+
     taskInput.value = "";
-    inputArea.classList.remove("show");
+
+    inputArea.classList.remove(
+        "show"
+    );
+
+
     save();
+
     render();
+
 };
 
-taskInput.addEventListener("keydown", e => {
-    if (e.key === "Enter") saveBtn.onclick();
-    if (e.key === "Escape") {
-        inputArea.classList.remove("show");
-        taskInput.value = "";
+
+taskInput.addEventListener(
+    "keydown",
+    e => {
+
+        if (e.key === "Enter") {
+
+            saveBtn.onclick();
+
+        }
+
+        if (e.key === "Escape") {
+
+            inputArea.classList.remove(
+                "show"
+            );
+
+            taskInput.value = "";
+
+        }
+
     }
-});
+);
+
 
 themeBtn.onclick = () => {
-    darkMode = !darkMode;
+
+    darkMode =
+        !darkMode;
+
     save();
+
     applyTheme();
+
 };
 
+
 render();
+
 </script>
 
 </body>
