@@ -244,7 +244,7 @@ body {
     border-color: var(--red-border);
 }
 
-/* الترقيم */
+/* الترقيم (قابل للنقر المزدوج لإضافة/تعديل التاريخ) */
 .task-number {
     width: 58px;
     height: 58px;
@@ -259,6 +259,8 @@ body {
     direction: ltr;
     unicode-bidi: isolate;
     text-align: center;
+    cursor: pointer;
+    user-select: none;
 }
 
 .task-text {
@@ -752,7 +754,7 @@ function render() {
 
         item.innerHTML = `
 
-            <div class="task-number">
+            <div class="task-number" title="انقر مرتين لاختيار/تعديل التاريخ">
                 ${index + 1}
             </div>
 
@@ -809,7 +811,7 @@ function render() {
         const textDiv = item.querySelector(".task-text");
         textDiv.textContent = task.text;
 
-        // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
+        // ميزة التعديل المزدوج للنص فقط عندما لا توجد علامة صح أو خطأ
         textDiv.addEventListener("dblclick", () => {
             if (task.status === "done" || task.status === "failed") {
                 return; // مقفل إذا كان منجزاً أو متعثراً
@@ -843,6 +845,91 @@ function render() {
                     render();
                 }
             });
+        });
+
+
+        // النقر المزدوج على رقم المهمة لاختيار وتعديل التاريخ (اختياري وبلا نهاية للمدى الزمني ومقفل إذا كانت المهمة منجزة أو متعثرة)
+        const numberDiv = item.querySelector(".task-number");
+        numberDiv.addEventListener("dblclick", () => {
+            if (task.status === "done" || task.status === "failed") {
+                return; // مقفل إذا تم وضع صح أو خطأ
+            }
+
+            // نافذة اختيار التاريخ مع مدى سنوات ممتد بلا نهاية واحترافي (من 2000 إلى 2100)
+            const currentParts = task.date ? task.date.split("-") : ["18", "8", "2026"];
+            const curD = currentParts[0] || "18";
+            const curM = currentParts[1] || "8";
+            const curY = currentParts[2] || "2026";
+
+            const overlay = document.createElement("div");
+            overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:grid;place-items:center;z-index:9999;";
+            
+            const modal = document.createElement("div");
+            modal.style.cssText = "background:#fff;padding:24px;border-radius:24px;width:300px;box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;";
+            if(darkMode) {
+                modal.style.background = "#1a2130";
+                modal.style.color = "#edf1f7";
+            }
+
+            modal.innerHTML = `
+                <h3 style="margin-bottom:16px;font-size:18px;">اختر التاريخ</h3>
+                <div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;direction:ltr;">
+                    <select id="selDay" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
+                    <select id="selMonth" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
+                    <select id="selYear" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
+                </div>
+                <div style="display:flex;gap:10px;justify-content:center;">
+                    <button id="confirmDate" style="padding:8px 20px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;">تأكيد</button>
+                    <button id="cancelDate" style="padding:8px 20px;border:0;border-radius:12px;background:#ccc;color:#333;font-weight:700;cursor:pointer;">إلغاء</button>
+                </div>
+            `;
+
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+
+            const selDay = modal.querySelector("#selDay");
+            const selMonth = modal.querySelector("#selMonth");
+            const selYear = modal.querySelector("#selYear");
+
+            for(let d=1; d<=31; d++) {
+                const opt = document.createElement("option");
+                opt.value = d;
+                opt.textContent = d;
+                if(d == curD) opt.selected = true;
+                selDay.appendChild(opt);
+            }
+
+            for(let m=1; m<=12; m++) {
+                const opt = document.createElement("option");
+                opt.value = m;
+                opt.textContent = m;
+                if(m == curM) opt.selected = true;
+                selMonth.appendChild(opt);
+            }
+
+            // مدى سنوات ممتد واحترافي بلا نهاية (من عام 2000 إلى 2100)
+            for(let y=2000; y<=2100; y++) {
+                const opt = document.createElement("option");
+                opt.value = y;
+                opt.textContent = y;
+                if(y == curY) opt.selected = true;
+                selYear.appendChild(opt);
+            }
+
+            modal.querySelector("#confirmDate").onclick = () => {
+                tasks[index].date = `${selDay.value}-${selMonth.value}-${selYear.value}`;
+                save();
+                document.body.removeChild(overlay);
+                render();
+            };
+
+            modal.querySelector("#cancelDate").onclick = () => {
+                document.body.removeChild(overlay);
+            };
+
+            overlay.onclick = (e) => {
+                if(e.target === overlay) document.body.removeChild(overlay);
+            };
         });
 
 
@@ -938,7 +1025,7 @@ saveBtn.onclick = () => {
             taskInput.value.trim(),
 
         status: "",
-        date: "18-8-2026"
+        date: "" // لا يُضاف أي تاريخ تلقائياً عند إنشاء المهمة الجديدة
 
     });
 
