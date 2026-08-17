@@ -259,6 +259,8 @@ body {
     direction: ltr;
     unicode-bidi: isolate;
     text-align: center;
+    cursor: pointer;
+    user-select: none;
 }
 
 .task-text {
@@ -577,6 +579,14 @@ html.dark .state-btn {
 </main>
 
 <script>
+// تسجيل الـ Service Worker لدعم الإشعارات في الخلفية
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(err => {
+            console.log('SW registration failed: ', err);
+        });
+    });
+}
 
 const root = document.getElementById("root");
 const title = document.getElementById("title");
@@ -590,6 +600,51 @@ const saveBtn = document.getElementById("saveBtn");
 const taskList = document.getElementById("taskList");
 const empty = document.getElementById("empty");
 const themeBtn = document.getElementById("themeBtn");
+
+// دالة تشغيل الصوت والإشعارات الفاخرة عند النقر المزدوج على أرقام المهام
+function triggerMissionNotification(taskTextContent) {
+    // تشغيل نغمة bell.mp3 الفاخرة
+    try {
+        const audio = new Audio('bell.mp3');
+        audio.play().catch(e => console.log("Audio play blocked:", e));
+    } catch (err) {
+        console.log("Audio error:", err);
+    }
+
+    // إرسال إشعار iPhone-style عبر الـ Notification API
+    if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+            showNotification(taskTextContent);
+        } else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    showNotification(taskTextContent);
+                }
+            });
+        }
+    }
+}
+
+function showNotification(taskTextContent) {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString(lang === 'ar' ? 'ar-SA' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+    const dateString = now.toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US');
+    
+    const options = {
+        body: `${lang === 'ar' ? 'التاريخ' : 'Date'}: ${dateString} - ${lang === 'ar' ? 'الوقت' : 'Time'}: ${timeString}\n${taskTextContent}`,
+        icon: '9368C532-D833-4080-AB32-CC3CEBB9E3B8.png',
+        badge: '9368C532-D833-4080-AB32-CC3CEBB9E3B8.png',
+        vibrate: [200, 100, 200]
+    };
+
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification('Daily Mission 🎯', options);
+        });
+    } else {
+        new Notification('Daily Mission 🎯', options);
+    }
+}
 
 
 let lang = localStorage.getItem("language") || "ar";
@@ -741,7 +796,7 @@ function render() {
 
         item.innerHTML = `
 
-            <div class="task-number">
+            <div class="task-number" title="انقر نقراً مزدوجاً لتفعيل التنبيه والصوت والتاريخ والوقت">
                 ${index + 1}
             </div>
 
@@ -795,7 +850,13 @@ function render() {
         const textDiv = item.querySelector(".task-text");
         textDiv.textContent = task.text;
 
-        // ميزة التعديل المزدوج فقط عندما لا توجد علامة صح أو خطأ
+        // ربط النقر المزدوج على رقم المهمة (task-number) لتشغيل النغمة والتنبيه والتاريخ والوقت
+        const numberDiv = item.querySelector(".task-number");
+        numberDiv.addEventListener("dblclick", () => {
+            triggerMissionNotification(task.text);
+        });
+
+        // ميزة التعديل المزدوج على نص المهمة فقط عندما لا توجد علامة صح أو خطأ
         textDiv.addEventListener("dblclick", () => {
             if (task.status === "done" || task.status === "failed") {
                 return; // مقفل إذا كان منجزاً أو متعثراً
