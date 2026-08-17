@@ -170,41 +170,12 @@ body {
 .input-area {
     display: none;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     margin-top: 14px;
 }
 
 .input-area.show {
     display: flex;
-}
-
-.input-row {
-    display: flex;
-    gap: 10px;
-}
-
-.datetime-row {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.datetime-row input {
-    flex: 1;
-    min-width: 130px;
-    height: 46px;
-    padding: 0 12px;
-    border: 2px solid var(--border);
-    border-radius: 14px;
-    outline: none;
-    color: var(--dark);
-    background: #fff;
-    font-size: 15px;
-    transition: background .25s ease, color .25s ease, border-color .25s ease;
-}
-
-.datetime-row input:focus {
-    border-color: var(--blue);
 }
 
 .task-input {
@@ -230,6 +201,7 @@ body {
 
 .save-btn {
     min-width: 90px;
+    height: 58px;
     border: 0;
     border-radius: 18px;
     background: var(--green);
@@ -274,7 +246,16 @@ body {
     border-color: var(--red-border);
 }
 
-/* الترقيم */
+/* الترقيم ووقت المهمة */
+.task-number-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
 .task-number {
     width: 58px;
     height: 58px;
@@ -289,21 +270,20 @@ body {
     direction: ltr;
     unicode-bidi: isolate;
     text-align: center;
-    cursor: pointer;
-    user-select: none;
-    transition: background .2s ease, color .2s ease;
 }
 
-.task-number:hover {
-    background: var(--blue);
-    color: white;
+.task-time-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-.task-content-wrapper {
-    min-width: 0;
+.task-text-container {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
 .task-text {
@@ -314,18 +294,6 @@ body {
     line-height: 1.35;
     overflow-wrap: anywhere;
     user-select: none;
-}
-
-.task-datetime {
-    font-size: 13px;
-    color: var(--muted);
-    font-weight: 500;
-    direction: ltr;
-    text-align: right;
-}
-
-html[dir="ltr"] .task-datetime {
-    text-align: left;
 }
 
 .task.done .task-text {
@@ -390,6 +358,72 @@ html[dir="ltr"] .task-datetime {
     stroke-linejoin: round;
 }
 
+/* نافذة الوقت المنبثقة */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    border: 2px solid #e6e2d9;
+    padding: 24px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+html.dark .modal-content {
+    background: #1a2130;
+    border-color: #30394b;
+    color: #edf1f7;
+}
+
+.modal-content input[type="datetime-local"] {
+    height: 52px;
+    padding: 0 14px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    color: var(--dark);
+    background: #fff;
+    font-size: 16px;
+    width: 100%;
+}
+
+html.dark .modal-content input[type="datetime-local"] {
+    background: #202938;
+    border-color: #3a4355;
+    color: #edf1f7;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.save-modal-btn { background: var(--green); color: white; }
+.close-modal-btn { background: #e5e1d8; color: var(--dark); }
+html.dark .close-modal-btn { background: #3a4355; color: #edf1f7; }
+
 html[dir="ltr"] .task {
     grid-template-columns: auto 1fr 58px;
 }
@@ -398,7 +432,7 @@ html[dir="ltr"] .task-number {
     grid-column: 3;
 }
 
-html[dir="ltr"] .task-content-wrapper {
+html[dir="ltr"] .task-text {
     grid-column: 2;
 }
 
@@ -407,63 +441,6 @@ html[dir="ltr"] .actions {
     grid-row: 1;
 }
 
-/* نافذة منبثقة لتحديد الوقت والتاريخ عند الضغط على رقم المهمة */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: grid;
-    place-items: center;
-    z-index: 1000;
-    padding: 20px;
-}
-
-.modal-content {
-    background: #fff;
-    padding: 24px;
-    border-radius: 24px;
-    width: min(100%, 400px);
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-.modal-content h3 {
-    color: var(--blue);
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-
-.modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 10px;
-}
-
-.modal-btn {
-    padding: 10px 20px;
-    border-radius: 14px;
-    border: 0;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.modal-btn.save {
-    background: var(--green);
-    color: white;
-}
-
-.modal-btn.cancel {
-    background: #e5e1d8;
-    color: var(--dark);
-}
 
 /* =========================================================
    الوضع الليلي
@@ -497,32 +474,19 @@ html.dark .theme-btn {
     color: #edf1f7;
 }
 
-html.dark .task-input,
-html.dark .datetime-row input,
-html.dark .modal-content {
+html.dark .task-input {
     background: #202938;
     border-color: #3a4355;
     color: #edf1f7;
 }
 
-html.dark .modal-content {
-    background: #1a2130;
-    border: 1px solid #3a4355;
-}
-
-html.dark .task-input:focus,
-html.dark .datetime-row input:focus {
+html.dark .task-input:focus {
     border-color: var(--blue);
 }
 
 html.dark .task-number {
     background: rgba(255,255,255,.12);
     color: #edf1f7;
-}
-
-html.dark .task-number:hover {
-    background: var(--blue);
-    color: #fff;
 }
 
 html.dark .task.done .task-number {
@@ -544,16 +508,13 @@ html.dark .state-btn {
     color: #9da9c0;
 }
 
-html.dark .modal-btn.cancel {
-    background: #3a4355;
-    color: #edf1f7;
-}
 
 /* =========================================================
    الهاتف
    ========================================================= */
 
 @media (max-width: 600px) {
+
     body {
         padding: 10px;
     }
@@ -635,10 +596,6 @@ html.dark .modal-btn.cancel {
         flex-direction: column;
     }
 
-    .input-row {
-        flex-direction: column;
-    }
-
     .task-input,
     .save-btn {
         width: 100%;
@@ -686,19 +643,17 @@ html.dark .modal-btn.cancel {
 
         <div class="input-area" id="inputArea">
 
-            <div class="input-row">
-                <input
-                    id="taskInput"
-                    class="task-input"
-                    type="text"
-                    autocomplete="off"
-                    placeholder="اكتب المهمة..."
-                >
+            <input
+                id="taskInput"
+                class="task-input"
+                type="text"
+                autocomplete="off"
+                placeholder="اكتب المهمة..."
+            >
 
-                <button class="save-btn" id="saveBtn">
-                    إضافة
-                </button>
-            </div>
+            <button class="save-btn" id="saveBtn">
+                إضافة
+            </button>
 
         </div>
 
@@ -711,6 +666,21 @@ html.dark .modal-btn.cancel {
     </div>
 
 </main>
+
+<!-- نافذة ضبط الوقت المنبثقة -->
+<div class="modal" id="timeModal">
+    <div class="modal-content">
+        <h3 id="modalTitle" style="font-size: 1.1rem; font-weight:700;">حدد موعد المهمة</h3>
+        <input type="datetime-local" id="modalDateTimeInput">
+        <div class="modal-buttons">
+            <button class="close-modal-btn" id="modalCancelBtn">إلغاء</button>
+            <button class="save-modal-btn" id="modalSaveBtn">حفظ</button>
+        </div>
+    </div>
+</div>
+
+<!-- عنصر الصوت المخصص المكرر (Looping Bell) -->
+<audio id="alarmAudio" src="bell.mp3" preload="auto" loop></audio>
 
 <script>
 
@@ -727,11 +697,21 @@ const taskList = document.getElementById("taskList");
 const empty = document.getElementById("empty");
 const themeBtn = document.getElementById("themeBtn");
 
+const timeModal = document.getElementById("timeModal");
+const modalDateTimeInput = document.getElementById("modalDateTimeInput");
+const modalSaveBtn = document.getElementById("modalSaveBtn");
+const modalCancelBtn = document.getElementById("modalCancelBtn");
+const alarmAudio = document.getElementById("alarmAudio");
+
+let currentEditingTaskId = null;
+let activeAlarmTaskId = null;
+
 let lang = localStorage.getItem("language") || "ar";
 
 let tasks;
 
 try {
+
     tasks = JSON.parse(
         localStorage.getItem("tasks") || "[]"
     );
@@ -739,30 +719,16 @@ try {
     if (!Array.isArray(tasks)) {
         tasks = [];
     }
+
 } catch {
+
     tasks = [];
+
 }
 
 let darkMode =
     localStorage.getItem("darkMode") === "true";
 
-let currentAudio = null;
-
-// تسجيل Service Worker لتمكين الإشعارات المرئية
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker registered successfully', reg))
-            .catch(err => console.log('Service Worker registration failed', err));
-    });
-}
-
-// طلب إذن الإشعارات من المتصفح عند بدء التشغيل
-function requestNotificationPermission() {
-    if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
-    }
-}
 
 const text = {
 
@@ -774,9 +740,10 @@ const text = {
         input: "اكتب المهمة...",
         save: "إضافة",
         empty: "أضف أول مهمة لك",
-        modalTitle: "تحديد الوقت والتاريخ",
+        modalTitle: "حدد موعد المهمة",
         modalSave: "حفظ",
-        modalCancel: "إلغاء"
+        modalCancel: "إلغاء",
+        noTime: "اضغط لتحديد الوقت"
     },
 
     en: {
@@ -787,14 +754,17 @@ const text = {
         input: "Write your task...",
         save: "Add",
         empty: "Add your first task",
-        modalTitle: "Set Date & Time",
+        modalTitle: "Set task time",
         modalSave: "Save",
-        modalCancel: "Cancel"
+        modalCancel: "Cancel",
+        noTime: "Set time"
     }
 
 };
 
+
 function save() {
+
     localStorage.setItem(
         "tasks",
         JSON.stringify(tasks)
@@ -809,9 +779,12 @@ function save() {
         "darkMode",
         darkMode
     );
+
 }
 
+
 function applyTheme() {
+
     root.classList.toggle(
         "dark",
         darkMode
@@ -831,71 +804,12 @@ function applyTheme() {
             </svg>
         `;
     }
+
 }
 
-// تشغيل النغمة في وضع التكرار المستمر
-function playAlarmSound() {
-    try {
-        if (currentAudio) {
-            currentAudio.pause();
-            currentAudio.currentTime = 0;
-        }
-        currentAudio = new Audio("bell.mp3");
-        currentAudio.loop = true;
-        currentAudio.play().catch(e => console.log("Audio play blocked or failed", e));
-    } catch (e) {
-        console.log("Audio initialization failed", e);
-    }
-}
-
-// إيقاف النغمة
-function stopAlarmSound() {
-    if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-        currentAudio = null;
-    }
-}
-
-// إظهار إشعار النظام المرئي
-function showSystemNotification(taskText) {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        navigator.serviceWorker.ready.then(registration => {
-            registration.showNotification("Daily Mission - موعد المهمة", {
-                body: `حان موعد المهمة: ${taskText}`,
-                icon: "9368C532-D833-4080-AB32-CC3CEBB9E3B8.png",
-                tag: "task-alarm"
-            });
-        });
-    }
-}
-
-// فحص الوقت كل ثانية لإطلاق النغمة والإشعار معاً
-setInterval(() => {
-    if (!tasks || tasks.length === 0) return;
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    
-    const currentDateStr = `${year}-${month}-${day}`;
-    const currentTimeStr = `${hours}:${minutes}`;
-
-    tasks.forEach((task) => {
-        if (!task.notified && task.date && task.time && task.status !== "done" && task.status !== "failed") {
-            if (task.date === currentDateStr && task.time === currentTimeStr) {
-                playAlarmSound();
-                showSystemNotification(task.text);
-                task.notified = true;
-                save();
-            }
-        }
-    });
-}, 1000);
 
 function render() {
+
     root.dir =
         lang === "ar"
             ? "rtl"
@@ -921,6 +835,11 @@ function render() {
     empty.textContent =
         text[lang].empty;
 
+    document.getElementById("modalTitle").textContent = text[lang].modalTitle;
+    modalSaveBtn.textContent = text[lang].modalSave;
+    modalCancelBtn.textContent = text[lang].modalCancel;
+
+
     taskList.innerHTML = "";
 
     empty.style.display =
@@ -928,9 +847,12 @@ function render() {
             ? "none"
             : "block";
 
+
     tasks.forEach((task, index) => {
+
         const item =
             document.createElement("article");
+
 
         item.className =
             "task " +
@@ -942,22 +864,24 @@ function render() {
                         : ""
             );
 
-        let dateTimeDisplay = "";
-        if (task.date || task.time) {
-            dateTimeDisplay = `<div class="task-datetime">${task.date || ""} ${task.time || ""}</div>`;
-        }
+        const timeFormatted = task.targetTime ? new Date(task.targetTime).toLocaleTimeString(lang === 'ar' ? 'ar-SA' : 'en-US', {hour: '2-digit', minute:'2-digit'}) : text[lang].noTime;
+
 
         item.innerHTML = `
-            <div class="task-number" title="اضغط لتحديد الوقت والتاريخ">
-                ${index + 1}
+
+            <div class="task-number-container" data-task-id="${task.id}" title="حدد وقت المهمة">
+                <div class="task-number">
+                    ${index + 1}
+                </div>
+                <span class="task-time-label">${timeFormatted}</span>
             </div>
 
-            <div class="task-content-wrapper">
+            <div class="task-text-container">
                 <div class="task-text"></div>
-                ${dateTimeDisplay}
             </div>
 
             <div class="actions">
+
                 <button
                     class="state-btn cross ${
                         task.status === "failed"
@@ -984,55 +908,40 @@ function render() {
                     class="delete"
                     data-action="delete"
                 >
+
                     <svg viewBox="0 0 24 24">
+
                         <path d="M4 7h16"/>
                         <path d="M9 7V4h6v3"/>
                         <path d="M6 7l1 13h10l1-13"/>
                         <path d="M10 11v5"/>
                         <path d="M14 11v5"/>
+
                     </svg>
+
                 </button>
+
             </div>
         `;
 
-        const numberDiv = item.querySelector(".task-number");
-        numberDiv.addEventListener("click", () => {
-            const overlay = document.createElement("div");
-            overlay.className = "modal-overlay";
-            overlay.innerHTML = `
-                <div class="modal-content">
-                    <h3>${text[lang].modalTitle}</h3>
-                    <div class="datetime-row" style="flex-direction: column;">
-                        <input type="date" id="modalDate" value="${task.date || ""}">
-                        <input type="time" id="modalTime" value="${task.time || ""}">
-                    </div>
-                    <div class="modal-actions">
-                        <button class="modal-btn cancel" id="modalCancel">${text[lang].modalCancel}</button>
-                        <button class="modal-btn save" id="modalSave">${text[lang].modalSave}</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-
-            const modalDate = overlay.querySelector("#modalDate");
-            const modalTime = overlay.querySelector("#modalTime");
-
-            overlay.querySelector("#modalCancel").onclick = () => overlay.remove();
-            overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
-
-            overlay.querySelector("#modalSave").onclick = () => {
-                tasks[index].date = modalDate.value || "";
-                tasks[index].time = modalTime.value || "";
-                tasks[index].notified = false; 
-                save();
-                render();
-                overlay.remove();
-            };
-        });
 
         const textDiv = item.querySelector(".task-text");
         textDiv.textContent = task.text;
 
+        // فتح نافذة الوقت عند النقر على رقم المهمة أو الوقت
+        item.querySelector(".task-number-container").onclick = () => {
+            currentEditingTaskId = task.id;
+            if (task.targetTime) {
+                modalDateTimeInput.value = task.targetTime;
+            } else {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + 1);
+                modalDateTimeInput.value = now.toISOString().slice(0, 16);
+            }
+            timeModal.style.display = "flex";
+        };
+
+        // ميزة التعديل المزدوج للنص
         textDiv.addEventListener("dblclick", () => {
             if (task.status === "done" || task.status === "failed") {
                 return;
@@ -1068,93 +977,218 @@ function render() {
             });
         });
 
-        item.querySelectorAll("[data-action]").forEach(button => {
+
+        item.querySelectorAll(
+            "[data-action]"
+        ).forEach(button => {
+
             button.onclick = () => {
-                const action = button.dataset.action;
-                stopAlarmSound(); 
+
+                const action =
+                    button.dataset.action;
+
 
                 if (action === "delete") {
-                    tasks.splice(index, 1);
+                    if (activeAlarmTaskId === task.id) stopAlarm();
+                    tasks.splice(
+                        index,
+                        1
+                    );
+
                 } else {
+                    if (activeAlarmTaskId === task.id) stopAlarm();
                     tasks[index].status =
                         tasks[index].status === action
                             ? ""
                             : action;
+
                 }
 
+
                 save();
+
                 render();
+
             };
+
         });
 
+
         taskList.appendChild(item);
+
     });
 
+
     applyTheme();
+
 }
 
+
+// إدارة نافذة الوقت
+modalCancelBtn.onclick = () => {
+    timeModal.style.display = "none";
+    currentEditingTaskId = null;
+};
+
+modalSaveBtn.onclick = () => {
+    if (currentEditingTaskId && modalDateTimeInput.value) {
+        const task = tasks.find(t => t.id === currentEditingTaskId);
+        if (task) {
+            task.targetTime = modalDateTimeInput.value;
+            task.notified = false;
+            save();
+            render();
+        }
+    }
+    timeModal.style.display = "none";
+    currentEditingTaskId = null;
+};
+
+
+function triggerAlarm(task) {
+    activeAlarmTaskId = task.id;
+    alarmAudio.currentTime = 0;
+    alarmAudio.play().catch(e => console.log("Audio play blocked:", e));
+
+    if (Notification.permission === 'granted') {
+        new Notification('Daily Mission - موعد المهمة', {
+            body: `حان موعد المهمة: ${task.text}`,
+            icon: '9368C532-D833-4080-AB32-CC3CEBB9E3B8.png'
+        });
+    }
+}
+
+function stopAlarm() {
+    alarmAudio.pause();
+    alarmAudio.currentTime = 0;
+    activeAlarmTaskId = null;
+}
+
+// فحص دوري للمهام والتنبيهات
+setInterval(() => {
+    const now = new Date();
+    tasks.forEach(task => {
+        if (task.targetTime && !task.notified) {
+            const target = new Date(task.targetTime);
+            if (now >= target) {
+                task.notified = true;
+                triggerAlarm(task);
+                save();
+            }
+        }
+    });
+}, 1000);
+
+
+// طلب صلاحية الإشعارات عند البدء
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(() => {
+        if (Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
+    });
+}
+
+
 langBtn.onclick = () => {
+
     lang =
         lang === "ar"
             ? "en"
             : "ar";
 
     save();
+
     render();
+
 };
 
+
 addBtn.onclick = () => {
+
     inputArea.classList.toggle("show");
 
     if (
         inputArea.classList.contains("show")
     ) {
+
         taskInput.focus();
+
     }
+
 };
 
+
 saveBtn.onclick = () => {
+
     if (!taskInput.value.trim()) {
+
         taskInput.focus();
+
         return;
+
     }
 
+
     tasks.push({
+        id: Date.now(),
         text: taskInput.value.trim(),
         status: "",
-        date: "",
-        time: "",
+        targetTime: null,
         notified: false
     });
 
+
     taskInput.value = "";
-    inputArea.classList.remove("show");
+
+    inputArea.classList.remove(
+        "show"
+    );
+
 
     save();
+
     render();
+
 };
+
 
 taskInput.addEventListener(
     "keydown",
     e => {
+
         if (e.key === "Enter") {
+
             saveBtn.onclick();
+
         }
 
         if (e.key === "Escape") {
-            inputArea.classList.remove("show");
+
+            inputArea.classList.remove(
+                "show"
+            );
+
             taskInput.value = "";
+
         }
+
     }
 );
 
+
 themeBtn.onclick = () => {
-    darkMode = !darkMode;
+
+    darkMode =
+        !darkMode;
+
     save();
+
     applyTheme();
+
 };
 
-requestNotificationPermission();
+
 render();
 
 </script>
