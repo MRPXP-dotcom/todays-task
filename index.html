@@ -628,7 +628,11 @@ const text = {
         add: "أضف مهمة",
         input: "اكتب المهمة...",
         save: "إضافة",
-        empty: "أضف أول مهمة لك"
+        empty: "أضف أول مهمة لك",
+        dateModalTitle: "تحديد / تعديل التاريخ",
+        dateConfirm: "تأكيد وحفظ",
+        dateCancel: "إلغاء",
+        dateRemove: "إزالة التاريخ من المهمة"
     },
 
     en: {
@@ -638,7 +642,11 @@ const text = {
         add: "Add task",
         input: "Write your task...",
         save: "Add",
-        empty: "Add your first task"
+        empty: "Add your first task",
+        dateModalTitle: "Set / Edit Date",
+        dateConfirm: "Confirm & Save",
+        dateCancel: "Cancel",
+        dateRemove: "Remove Date"
     }
 
 };
@@ -744,7 +752,7 @@ function render() {
 
         item.innerHTML = `
 
-            <div class="task-number" title="انقر لاختيار أو تعديل أو إزالة التاريخ">
+            <div class="task-number" title="${lang === 'ar' ? 'انقر لاختيار أو تعديل أو إزالة التاريخ' : 'Click to set, edit, or remove date'}">
                 ${index + 1}
             </div>
 
@@ -861,7 +869,7 @@ function render() {
             }
 
             modal.innerHTML = `
-                <h3 style="margin-bottom:16px;font-size:18px;">تحديد / تعديل التاريخ</h3>
+                <h3 style="margin-bottom:16px;font-size:18px;">${text[lang].dateModalTitle}</h3>
                 <div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px;direction:ltr;">
                     <select id="selDay" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
                     <select id="selMonth" style="padding:8px;border-radius:10px;border:1px solid #ccc;font-size:16px;background:inherit;color:inherit;"></select>
@@ -869,10 +877,10 @@ function render() {
                 </div>
                 <div style="display:flex;flex-direction:column;gap:10px;">
                     <div style="display:flex;gap:10px;justify-content:center;">
-                        <button id="confirmDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;">تأكيد وحفظ</button>
-                        <button id="cancelDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:#ccc;color:#333;font-weight:700;cursor:pointer;">إلغاء</button>
+                        <button id="confirmDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:var(--green);color:#fff;font-weight:700;cursor:pointer;">${text[lang].dateConfirm}</button>
+                        <button id="cancelDate" style="flex:1;padding:10px;border:0;border-radius:12px;background:#ccc;color:#333;font-weight:700;cursor:pointer;">${text[lang].dateCancel}</button>
                     </div>
-                    ${task.date ? `<button id="removeDate" style="width:100%;padding:8px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:700;cursor:pointer;">إزالة التاريخ من المهمة</button>` : ''}
+                    ${task.date ? `<button id="removeDate" style="width:100%;padding:8px;border:0;border-radius:12px;background:var(--red);color:#fff;font-weight:700;cursor:pointer;">${text[lang].dateRemove}</button>` : ''}
                 </div>
             `;
 
