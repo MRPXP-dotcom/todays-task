@@ -1,61 +1,64 @@
-const CACHE_NAME = "daily-mission-v1";
+const CACHE_NAME = 'daily-mission-auto-v1';
 
-const FILES_TO_CACHE = [
-    "./",
-    "./index.html",
-    "./9368C532-D833-4080-AB32-CC3CEBB9E3B8.png"
+const APP_FILES = [
+    './',
+    './index.html',
+    './9368C532-D833-4080-AB32-CC3CEBB9E3B8.png'
 ];
 
-self.addEventListener("install", event => {
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(FILES_TO_CACHE))
-            .then(() => self.skipWaiting())
-    );
+// التثبيت
+self.addEventListener('install', (event) => {
+    self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
+// التفعيل وتنظيف الإصدارات القديمة
+self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
-                keys
-                    .filter(key => key !== CACHE_NAME)
-                    .map(key => caches.delete(key))
-            )
-        ).then(() => self.clients.claim())
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames
+                    .filter((cache) => cache !== CACHE_NAME)
+                    .map((cache) => caches.delete(cache))
+            );
+        })
     );
+
+    self.clients.claim();
 });
 
-self.addEventListener("fetch", event => {
-    if (event.request.method !== "GET") {
+// تحديث من الإنترنت، والرجوع للكاش عند انقطاعه
+self.addEventListener('fetch', (event) => {
+
+    if (event.request.method !== 'GET') {
+        return;
+    }
+
+    const requestURL = new URL(event.request.url);
+
+    // نتعامل فقط مع ملفات نفس موقع Daily Mission
+    if (requestURL.origin !== self.location.origin) {
         return;
     }
 
     event.respondWith(
-        caches.match(event.request).then(cachedResponse => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
+        fetch(event.request)
+            .then((networkResponse) => {
 
-            return fetch(event.request)
-                .then(networkResponse => {
-                    if (
-                        networkResponse &&
-                        networkResponse.status === 200 &&
-                        networkResponse.type === "basic"
-                    ) {
-                        const responseClone = networkResponse.clone();
+                if (
+                    networkResponse &&
+                    networkResponse.status === 200
+                ) {
+                    const responseClone = networkResponse.clone();
 
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(event.request, responseClone);
-                        });
-                    }
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseClone);
+                    });
+                }
 
-                    return networkResponse;
-                })
-                .catch(() => {
-                    return caches.match("./index.html");
-                });
-        })
+                return networkResponse;
+            })
+            .catch(() => {
+                return caches.match(event.request);
+            })
     );
 });
