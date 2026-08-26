@@ -1,13 +1,19 @@
-const CACHE_NAME = 'daily-mission-auto-v1';
+const CACHE_NAME = 'daily-mission-auto-v2';
 
+// الملفات التي يجب حفظها وتخزينها ليعمل التطبيق وشعاره بكفاءة
 const APP_FILES = [
     './',
     './index.html',
     './9368C532-D833-4080-AB32-CC3CEBB9E3B8.png'
 ];
 
-// التثبيت
+// التثبيت وحفظ الأصول
 self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(APP_FILES);
+        })
+    );
     self.skipWaiting();
 });
 
@@ -22,39 +28,25 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
-
     self.clients.claim();
 });
 
-// تحديث من الإنترنت، والرجوع للكاش عند انقطاعه
+// جلب التحديثات من الشبكة والرجوع للكاش عند انقطاعها
 self.addEventListener('fetch', (event) => {
-
-    if (event.request.method !== 'GET') {
-        return;
-    }
+    if (event.request.method !== 'GET') return;
 
     const requestURL = new URL(event.request.url);
-
-    // نتعامل فقط مع ملفات نفس موقع Daily Mission
-    if (requestURL.origin !== self.location.origin) {
-        return;
-    }
+    if (requestURL.origin !== self.location.origin) return;
 
     event.respondWith(
         fetch(event.request)
             .then((networkResponse) => {
-
-                if (
-                    networkResponse &&
-                    networkResponse.status === 200
-                ) {
+                if (networkResponse && networkResponse.status === 200) {
                     const responseClone = networkResponse.clone();
-
                     caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, responseClone);
                     });
                 }
-
                 return networkResponse;
             })
             .catch(() => {
